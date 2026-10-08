@@ -2,7 +2,7 @@
  * API Service for Aura Store products.
  * Uses DummyJSON with graceful fallback to cached/mock catalog on network failure.
  */
-import { FALLBACK_PRODUCTS } from './mockProducts';
+import { FALLBACK_PRODUCTS } from './mockProducts.js';
 
 const BASE_URL = 'https://dummyjson.com';
 const TIMEOUT_MS = 10000;
