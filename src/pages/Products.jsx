@@ -3,10 +3,9 @@ import { useSearchParams } from 'react-router-dom';
 import { getProducts, getCategories } from '../services/api';
 import ProductGrid from '../components/ProductGrid';
 import FilterBar from '../components/FilterBar';
-import SearchBar from '../components/SearchBar';
 import { ProductSkeletonGrid } from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
-import { SlidersHorizontal, ChevronDown, PackageCheck } from 'lucide-react';
+import { RotateCcw, Search } from 'lucide-react';
 
 export default function Products() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -17,12 +16,10 @@ export default function Products() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filter & Search states
-  const categoryFromUrl = searchParams.get('category') || 'all';
-  const searchFromUrl = searchParams.get('search') || '';
+  // Filter & Search states from URL
+  const selectedCategory = searchParams.get('category') || 'all';
+  const searchQuery = searchParams.get('search') || '';
 
-  const [selectedCategory, setSelectedCategory] = useState(categoryFromUrl);
-  const [searchQuery, setSearchQuery] = useState(searchFromUrl);
   const [minPrice, setMinPrice] = useState('');
   const [maxPrice, setMaxPrice] = useState('');
   const [minRating, setMinRating] = useState('0');
@@ -30,12 +27,6 @@ export default function Products() {
 
   // Pagination / Load more
   const [visibleCount, setVisibleCount] = useState(12);
-
-  // Sync state if URL changes
-  useEffect(() => {
-    setSelectedCategory(searchParams.get('category') || 'all');
-    setSearchQuery(searchParams.get('search') || '');
-  }, [searchParams]);
 
   // Fetch initial products and categories
   const fetchData = async () => {
@@ -62,25 +53,11 @@ export default function Products() {
 
   // Update URL params when category changes
   const handleSelectCategory = (cat) => {
-    setSelectedCategory(cat);
     const newParams = new URLSearchParams(searchParams);
     if (cat === 'all') {
       newParams.delete('category');
     } else {
       newParams.set('category', cat);
-    }
-    setSearchParams(newParams);
-    setVisibleCount(12);
-  };
-
-  // Update URL params when search query changes
-  const handleSearchChange = (query) => {
-    setSearchQuery(query);
-    const newParams = new URLSearchParams(searchParams);
-    if (!query) {
-      newParams.delete('search');
-    } else {
-      newParams.set('search', query);
     }
     setSearchParams(newParams);
     setVisibleCount(12);
@@ -102,8 +79,6 @@ export default function Products() {
   };
 
   const handleResetFilters = () => {
-    setSelectedCategory('all');
-    setSearchQuery('');
     setMinPrice('');
     setMaxPrice('');
     setMinRating('0');
@@ -112,45 +87,45 @@ export default function Products() {
     setVisibleCount(12);
   };
 
-  // Combined Filtering & Sorting Logic
+  // Filter and sort products
   const filteredProducts = useMemo(() => {
     let result = [...allProducts];
 
-    // 1. Search Query Filter (Title, category, description, brand)
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase().trim();
-      result = result.filter(
-        (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
-          (p.brand && p.brand.toLowerCase().includes(q)) ||
-          (p.description && p.description.toLowerCase().includes(q))
-      );
-    }
-
-    // 2. Category Filter
+    // 1. Category filter
     if (selectedCategory && selectedCategory !== 'all') {
       result = result.filter(
         (p) => p.category.toLowerCase() === selectedCategory.toLowerCase()
       );
     }
 
-    // 3. Minimum Price Filter
+    // 2. Search query filter
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(
+        (p) =>
+          p.title.toLowerCase().includes(q) ||
+          p.category.toLowerCase().includes(q) ||
+          p.description.toLowerCase().includes(q) ||
+          p.brand.toLowerCase().includes(q)
+      );
+    }
+
+    // 3. Min Price in INR
     if (minPrice !== '' && !isNaN(Number(minPrice))) {
       result = result.filter((p) => p.price >= Number(minPrice));
     }
 
-    // 4. Maximum Price Filter
+    // 4. Max Price in INR
     if (maxPrice !== '' && !isNaN(Number(maxPrice))) {
       result = result.filter((p) => p.price <= Number(maxPrice));
     }
 
-    // 5. Minimum Rating Filter
-    if (minRating !== '0' && !isNaN(Number(minRating))) {
-      result = result.filter((p) => p.rating >= Number(minRating));
+    // 5. Min Rating filter
+    if (minRating !== '0') {
+      result = result.filter((p) => (p.rating || 0) >= Number(minRating));
     }
 
-    // 6. Sorting Logic
+    // 6. Sorting
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -159,50 +134,37 @@ export default function Products() {
         result.sort((a, b) => b.price - a.price);
         break;
       case 'rating-desc':
-        result.sort((a, b) => b.rating - a.rating);
+        result.sort((a, b) => (b.rating || 0) - (a.rating || 0));
         break;
-      case 'name-asc':
-        result.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-      case 'name-desc':
-        result.sort((a, b) => b.title.localeCompare(a.title));
+      case 'newest':
+        result.sort((a, b) => b.id - a.id);
         break;
       case 'featured':
       default:
-        // Default preserve ID or order
+        // Keep original order
         break;
     }
 
     return result;
-  }, [allProducts, searchQuery, selectedCategory, minPrice, maxPrice, minRating, sortBy]);
+  }, [allProducts, selectedCategory, searchQuery, minPrice, maxPrice, minRating, sortBy]);
 
   const displayedProducts = filteredProducts.slice(0, visibleCount);
   const hasMore = visibleCount < filteredProducts.length;
 
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 12);
+    setVisibleCount((prev) => prev + 8);
   };
 
   return (
-    <div className="container" style={{ paddingBottom: '80px', paddingTop: '32px' }}>
-      {/* Page Header */}
+    <div className="container" style={{ paddingTop: '32px', paddingBottom: '80px' }}>
+      {/* Header Banner */}
       <div style={{ marginBottom: '28px' }}>
-        <h1 style={{ fontSize: '2.25rem', fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--text-main)', marginBottom: '8px' }}>
-          Catalog & Collections
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '6px' }}>
+          Shop All Products
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-          Explore our complete selection of curated lifestyle, decor, beauty, and home essentials.
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem' }}>
+          Discover curated electronics, fashion, home essentials, and lifestyle gear at realistic Indian prices.
         </p>
-      </div>
-
-      {/* Main Search Bar */}
-      <div style={{ marginBottom: '20px', maxWidth: '640px' }}>
-        <SearchBar
-          value={searchQuery}
-          onChange={handleSearchChange}
-          placeholder="Filter by title, brand, or keywords..."
-          size="large"
-        />
       </div>
 
       {/* Filter and Sort Toolbar */}
@@ -221,43 +183,76 @@ export default function Products() {
         totalResults={filteredProducts.length}
       />
 
-      {/* Content State */}
+      {/* Main Content State */}
       {loading ? (
         <ProductSkeletonGrid count={12} />
       ) : error ? (
         <ErrorMessage
-          title="Catalog Unreachable"
+          title="Could Not Load Products"
           message={error}
           onRetry={fetchData}
         />
+      ) : filteredProducts.length === 0 ? (
+        /* Helpful message when no products match the selected filters */
+        <div
+          style={{
+            background: 'var(--bg-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '60px 24px',
+            textAlign: 'center',
+            maxWidth: '520px',
+            margin: '40px auto',
+            boxShadow: 'var(--shadow-sm)',
+          }}
+        >
+          <div
+            style={{
+              width: '60px',
+              height: '60px',
+              borderRadius: '50%',
+              backgroundColor: 'var(--bg-secondary)',
+              color: 'var(--color-text-secondary)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 16px',
+            }}
+          >
+            <Search size={28} />
+          </div>
+          <h2 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '8px', color: 'var(--color-text)' }}>
+            No Matching Products Found
+          </h2>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.925rem', marginBottom: '24px', lineHeight: 1.5 }}>
+            We couldn't find any products matching your active filters or search terms. Try adjusting the price range, rating, or clearing your filters.
+          </p>
+          <button
+            type="button"
+            onClick={handleResetFilters}
+            className="btn btn-primary btn-md"
+            style={{ gap: '8px' }}
+          >
+            <RotateCcw size={16} />
+            <span>Clear All Filters</span>
+          </button>
+        </div>
       ) : (
         <>
-          <ProductGrid
-            products={displayedProducts}
-            emptyTitle={searchQuery ? `No results for "${searchQuery}"` : 'No matching products'}
-            emptyDescription="Try clearing your filters or searching for another keyword to discover items."
-            onClearFilters={handleResetFilters}
-          />
+          {/* Product Grid */}
+          <ProductGrid products={displayedProducts} />
 
           {/* Load More Button */}
           {hasMore && (
-            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '48px' }}>
+            <div style={{ textAlign: 'center', marginTop: '48px' }}>
               <button
                 type="button"
                 onClick={handleLoadMore}
                 className="btn btn-secondary btn-lg"
-                style={{ display: 'flex', alignItems: 'center', gap: '8px', minWidth: '200px' }}
+                style={{ minWidth: '200px' }}
               >
-                <span>Load More Products</span>
-                <ChevronDown size={18} />
+                Load More Products ({filteredProducts.length - visibleCount} remaining)
               </button>
-            </div>
-          )}
-
-          {/* Product count footer */}
-          {!hasMore && filteredProducts.length > 0 && (
-            <div style={{ textAlign: 'center', marginTop: '48px', color: 'var(--text-muted)', fontSize: '0.875rem' }}>
-              Showing all {filteredProducts.length} items
             </div>
           )}
         </>

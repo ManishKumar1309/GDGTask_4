@@ -35,10 +35,11 @@ export const WishlistProvider = ({ children }) => {
         id: product.id,
         title: product.title,
         price: Number(product.price) || 0,
+        discountPercentage: product.discountPercentage || 0,
         rating: Number(product.rating) || 4.5,
         thumbnail: product.thumbnail || (product.images && product.images[0]) || '',
         category: product.category || 'General',
-        brand: product.brand || 'Aura',
+        brand: product.brand || 'Shopora',
         stock: product.stock || 20,
       },
     ]);

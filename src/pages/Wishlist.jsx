@@ -2,46 +2,66 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useWishlist } from '../context/WishlistContext';
 import { formatPrice } from '../utils/formatters';
-import EmptyState from '../components/EmptyState';
-import {
-  Heart,
-  ShoppingBag,
-  Trash2,
-  Star,
-  Eye,
-  ArrowRight,
-  Sparkles,
-} from 'lucide-react';
+import { Heart, ShoppingBag, Trash2, ArrowRight } from 'lucide-react';
 
 export default function Wishlist() {
   const { wishlist, removeFromWishlist, moveToCart } = useWishlist();
 
   if (!wishlist || wishlist.length === 0) {
     return (
-      <div className="container" style={{ padding: '60px 20px' }}>
-        <EmptyState
-          icon={Heart}
-          title="Your Wishlist is Empty"
-          description="Save items you love by tapping the heart icon on any product card while browsing."
-          actionText="Explore Collections"
-          actionLink="/products"
-        />
+      <div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>
+        <div
+          style={{
+            maxWidth: '460px',
+            margin: '0 auto',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: 'var(--radius-lg)',
+            padding: '48px 32px',
+            boxShadow: 'var(--shadow-sm)',
+          }}
+        >
+          <div
+            style={{
+              width: '72px',
+              height: '72px',
+              borderRadius: '50%',
+              backgroundColor: '#FEF2F2',
+              color: '#EF4444',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 20px',
+            }}
+          >
+            <Heart size={36} />
+          </div>
+
+          <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '8px' }}>
+            Your Wishlist is Empty
+          </h2>
+
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', marginBottom: '28px', lineHeight: 1.5 }}>
+            Save products you like by clicking the heart icon on any card while browsing.
+          </p>
+
+          <Link to="/shop" className="btn btn-primary btn-lg" style={{ width: '100%', gap: '8px' }}>
+            <span>Explore Products</span>
+            <ArrowRight size={18} />
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container" style={{ paddingTop: '36px', paddingBottom: '80px' }}>
+    <div className="container" style={{ paddingTop: '32px', paddingBottom: '80px' }}>
       <div style={{ marginBottom: '32px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-          <Heart size={20} color="#dc2626" fill="#dc2626" />
-          <span className="badge badge-accent">Saved Items</span>
-        </div>
-        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '6px' }}>
           My Wishlist
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-          You have {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'} saved in your private collection.
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem' }}>
+          You have {wishlist.length} {wishlist.length === 1 ? 'item' : 'items'} saved in your wishlist.
         </p>
       </div>
 
@@ -56,21 +76,21 @@ export default function Wishlist() {
           <div
             key={item.id}
             style={{
-              background: 'var(--bg-surface)',
-              border: '1px solid var(--border-subtle)',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--color-border)',
               borderRadius: 'var(--radius-md)',
               overflow: 'hidden',
               display: 'flex',
               flexDirection: 'column',
-              boxShadow: 'var(--shadow-sm)',
+              boxShadow: 'var(--shadow-xs)',
               transition: 'transform var(--transition-fast), box-shadow var(--transition-fast)',
             }}
           >
-            {/* Image & Remove overlay */}
-            <div style={{ position: 'relative', width: '100%', paddingTop: '100%', backgroundColor: '#fafbfc' }}>
-              <Link to={`/products/${item.id}`}>
+            {/* Image & Remove button */}
+            <div style={{ position: 'relative', width: '100%', paddingTop: '90%', backgroundColor: 'var(--bg-secondary)' }}>
+              <Link to={`/shop/${item.id}`}>
                 <img
-                  src={item.thumbnail || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300'}
+                  src={item.thumbnail}
                   alt={item.title}
                   style={{
                     position: 'absolute',
@@ -92,72 +112,67 @@ export default function Wishlist() {
                   position: 'absolute',
                   top: '12px',
                   right: '12px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                  backgroundColor: 'var(--bg-card)',
                   width: '34px',
                   height: '34px',
                   color: 'var(--color-danger)',
                 }}
-                title="Remove from Wishlist"
-                aria-label="Remove from Wishlist"
+                title="Remove from wishlist"
+                aria-label="Remove item"
               >
                 <Trash2 size={16} />
               </button>
             </div>
 
             {/* Content */}
-            <div style={{ padding: '18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>
-                  {item.category}
-                </span>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '3px', fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-secondary)' }}>
-                  <Star size={12} fill="#d97706" color="#d97706" />
-                  <span>{Number(item.rating || 4.5).toFixed(1)}</span>
-                </div>
-              </div>
+            <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+              <span style={{ fontSize: '0.725rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-text-secondary)', marginBottom: '4px' }}>
+                {item.category}
+              </span>
 
-              <Link to={`/products/${item.id}`}>
+              <Link to={`/shop/${item.id}`}>
                 <h3
                   style={{
                     fontSize: '0.95rem',
                     fontWeight: 700,
-                    color: 'var(--text-main)',
-                    lineHeight: 1.4,
-                    marginBottom: '12px',
+                    color: 'var(--color-text)',
+                    lineHeight: 1.35,
+                    marginBottom: '8px',
                     display: '-webkit-box',
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: 'vertical',
                     overflow: 'hidden',
-                    height: '2.8em',
+                    height: '2.7em',
                   }}
                 >
                   {item.title}
                 </h3>
               </Link>
 
-              <div style={{ marginTop: 'auto', marginBottom: '16px', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                {formatPrice(item.price)}
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '16px', marginTop: 'auto' }}>
+                <span style={{ fontSize: '1.2rem', fontWeight: 800, color: 'var(--color-text)' }}>
+                  {formatPrice(item.price)}
+                </span>
               </div>
 
+              {/* Action buttons: Move to Cart or View Details */}
               <div style={{ display: 'flex', gap: '8px' }}>
                 <button
                   type="button"
                   onClick={() => moveToCart(item)}
-                  className="btn btn-primary"
-                  style={{ flex: 1, padding: '10px 14px', fontSize: '0.875rem' }}
+                  className="btn btn-primary btn-sm"
+                  style={{ flex: 1, gap: '6px' }}
                 >
-                  <ShoppingBag size={16} />
-                  <span>Move to Bag</span>
+                  <ShoppingBag size={15} />
+                  <span>Move to Cart</span>
                 </button>
-
                 <Link
-                  to={`/products/${item.id}`}
-                  className="btn btn-secondary"
-                  style={{ padding: '10px 12px' }}
+                  to={`/shop/${item.id}`}
+                  className="btn btn-secondary btn-sm"
+                  style={{ padding: '8px 12px' }}
                   title="View Details"
-                  aria-label="View Details"
                 >
-                  <Eye size={16} />
+                  Details
                 </Link>
               </div>
             </div>

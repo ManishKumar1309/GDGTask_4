@@ -1,13 +1,14 @@
 /**
- * Safe LocalStorage utilities with fallback and corruption handling.
+ * Safe LocalStorage utilities with fallback and corruption handling for Shopora.
  */
 
 const STORAGE_KEYS = {
-  CART: 'aura_cart_v1',
-  WISHLIST: 'aura_wishlist_v1',
-  ORDERS: 'aura_orders_v1',
-  AUTH_USER: 'aura_auth_user_v1',
-  SEARCH_HISTORY: 'aura_recent_searches_v1',
+  CART: 'shopora_cart_v1',
+  WISHLIST: 'shopora_wishlist_v1',
+  ORDERS: 'shopora_orders_v1',
+  AUTH_USER: 'shopora_auth_user_v1',
+  THEME: 'shopora_theme_v1',
+  RECENTLY_VIEWED: 'shopora_recently_viewed_v1',
 };
 
 export { STORAGE_KEYS };
@@ -69,4 +70,34 @@ export const removeStorageItem = (key) => {
 export const clearStoreStorage = () => {
   if (typeof window === 'undefined') return;
   Object.values(STORAGE_KEYS).forEach((k) => removeStorageItem(k));
+};
+
+/**
+ * Recently Viewed products helper
+ */
+export const addRecentlyViewedProduct = (product) => {
+  if (!product || !product.id) return;
+  try {
+    const existing = getStorageItem(STORAGE_KEYS.RECENTLY_VIEWED, []);
+    const filtered = existing.filter((p) => p.id !== product.id);
+    const updated = [
+      {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discountPercentage: product.discountPercentage,
+        rating: product.rating,
+        thumbnail: product.thumbnail,
+        category: product.category,
+      },
+      ...filtered,
+    ].slice(0, 8); // Keep last 8 items
+    setStorageItem(STORAGE_KEYS.RECENTLY_VIEWED, updated);
+  } catch (err) {
+    console.error('Error adding to recently viewed:', err);
+  }
+};
+
+export const getRecentlyViewedProducts = () => {
+  return getStorageItem(STORAGE_KEYS.RECENTLY_VIEWED, []);
 };

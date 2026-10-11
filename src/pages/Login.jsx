@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { validateLoginForm } from '../utils/validation';
-import { User, Lock, Mail, ArrowRight, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { User, ArrowRight } from 'lucide-react';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -10,15 +10,14 @@ export default function Login() {
   const { login, isAuthenticated } = useAuth();
 
   const [formData, setFormData] = useState({
-    email: 'member@aura.com',
+    email: 'user@shopora.in',
     password: 'password123',
-    name: '',
+    name: 'Manish Kumar',
   });
 
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
 
-  // If already authenticated, redirect to profile
   if (isAuthenticated) {
     navigate('/profile', { replace: true });
     return null;
@@ -48,6 +47,7 @@ export default function Login() {
     login({
       email: formData.email,
       name: formData.name,
+      password: formData.password,
     });
 
     const from = location.state?.from?.pathname || '/profile';
@@ -55,12 +55,12 @@ export default function Login() {
   };
 
   return (
-    <div className="container" style={{ padding: '60px 20px 100px', maxWidth: '480px' }}>
+    <div className="container" style={{ padding: '60px 20px 100px', maxWidth: '460px' }}>
       <div
         style={{
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-xl)',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-lg)',
           padding: '40px 32px',
           boxShadow: 'var(--shadow-md)',
         }}
@@ -68,10 +68,10 @@ export default function Login() {
         <div style={{ textAlign: 'center', marginBottom: '28px' }}>
           <div
             style={{
-              width: '54px',
-              height: '54px',
+              width: '56px',
+              height: '56px',
               borderRadius: '50%',
-              backgroundColor: 'var(--bg-subtle)',
+              backgroundColor: 'rgba(255, 153, 0, 0.12)',
               color: 'var(--color-primary)',
               display: 'flex',
               alignItems: 'center',
@@ -81,11 +81,11 @@ export default function Login() {
           >
             <User size={28} />
           </div>
-          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
-            Member Sign In
+          <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '6px' }}>
+            Welcome to Shopora
           </h1>
-          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
-            Access your orders, saved addresses, and member benefits.
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
+            Sign in to access your orders, wishlist, and profile
           </p>
         </div>
 
@@ -97,7 +97,7 @@ export default function Login() {
             <input
               id="loginName"
               type="text"
-              placeholder="e.g. Alex Morgan"
+              placeholder="e.g. Manish Kumar"
               value={formData.name}
               onChange={(e) => handleChange('name', e.target.value)}
               className="form-input"
@@ -145,15 +145,20 @@ export default function Login() {
             className="btn btn-primary btn-lg"
             style={{ width: '100%', marginTop: '8px', gap: '8px' }}
           >
-            <span>Sign In to Account</span>
+            <span>Sign In</span>
             <ArrowRight size={18} />
           </button>
         </form>
 
-        <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--border-light)', textAlign: 'center', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-          <p>
-            Demo mode active: Pre-filled credentials work instantly. No real authentication required.
-          </p>
+        <div style={{ marginTop: '20px', padding: '12px', background: 'var(--bg-secondary)', borderRadius: 'var(--radius-sm)', border: '1px solid var(--color-border)', fontSize: '0.8rem', color: 'var(--color-text-secondary)', textAlign: 'center' }}>
+          💡 Demo mode: One-click sign in with pre-filled credentials
+        </div>
+
+        <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--color-border)', textAlign: 'center', fontSize: '0.9rem', color: 'var(--color-text-secondary)' }}>
+          Don't have an account?{' '}
+          <Link to="/signup" style={{ color: 'var(--color-primary)', fontWeight: 700 }}>
+            Sign Up
+          </Link>
         </div>
       </div>
     </div>

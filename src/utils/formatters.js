@@ -1,14 +1,14 @@
 /**
- * Currency and date formatting helpers.
+ * Currency and date formatting helpers for Shopora.
+ * Uses Intl.NumberFormat with 'en-IN' locale and 'INR' currency.
  */
 
 export const formatPrice = (amount) => {
-  const num = Number(amount) || 0;
-  return new Intl.NumberFormat('en-US', {
+  const num = Math.round(Number(amount) || 0);
+  return new Intl.NumberFormat('en-IN', {
     style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    currency: 'INR',
+    maximumFractionDigits: 0,
   }).format(num);
 };
 
@@ -16,7 +16,7 @@ export const formatDate = (dateString) => {
   if (!dateString) return '';
   const date = new Date(dateString);
   if (isNaN(date.getTime())) return dateString;
-  return new Intl.DateTimeFormat('en-US', {
+  return new Intl.DateTimeFormat('en-IN', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
@@ -32,8 +32,8 @@ export const truncateText = (text, maxLength = 80) => {
 };
 
 export const generateOrderId = () => {
-  const prefix = 'AUR';
-  const timestamp = Date.now().toString(36).toUpperCase();
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `${prefix}-${timestamp}-${random}`;
+  const prefix = 'SHO';
+  const timestamp = Date.now().toString().slice(-4);
+  const random = Math.floor(1000 + Math.random() * 9000);
+  return `${prefix}-${timestamp}${random}`;
 };

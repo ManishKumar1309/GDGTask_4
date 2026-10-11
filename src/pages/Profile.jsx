@@ -10,11 +10,8 @@ import {
   Package,
   Heart,
   ShoppingBag,
-  Calendar,
   Mail,
-  ShieldCheck,
   ArrowRight,
-  Sparkles,
 } from 'lucide-react';
 
 export default function Profile() {
@@ -27,15 +24,22 @@ export default function Profile() {
   if (!isAuthenticated || !user) {
     return (
       <div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>
-        <div style={{ maxWidth: '440px', margin: '0 auto', background: 'var(--bg-surface)', padding: '40px', borderRadius: 'var(--radius-xl)', border: '1px solid var(--border-subtle)' }}>
-          <User size={48} color="var(--text-muted)" style={{ margin: '0 auto 16px' }} />
-          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px' }}>Sign in to View Profile</h2>
-          <p style={{ color: 'var(--text-secondary)', marginBottom: '24px', fontSize: '0.95rem' }}>
-            Please sign in to access your personal dashboard, saved addresses, and order history.
+        <div style={{ maxWidth: '440px', margin: '0 auto', background: 'var(--bg-card)', padding: '40px', borderRadius: 'var(--radius-lg)', border: '1px solid var(--color-border)', boxShadow: 'var(--shadow-sm)' }}>
+          <User size={48} color="var(--color-text-secondary)" style={{ margin: '0 auto 16px' }} />
+          <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '8px', color: 'var(--color-text)' }}>
+            Sign In to View Profile
+          </h2>
+          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px', fontSize: '0.95rem' }}>
+            Please sign in to access your orders, saved items, and account settings.
           </p>
-          <Link to="/login" className="btn btn-primary btn-lg" style={{ width: '100%' }}>
-            Sign In Now
-          </Link>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <Link to="/login" className="btn btn-primary btn-lg" style={{ flex: 1 }}>
+              Sign In
+            </Link>
+            <Link to="/signup" className="btn btn-secondary btn-lg" style={{ flex: 1 }}>
+              Sign Up
+            </Link>
+          </div>
         </div>
       </div>
     );
@@ -47,39 +51,34 @@ export default function Profile() {
   };
 
   return (
-    <div className="container" style={{ paddingTop: '36px', paddingBottom: '80px', maxWidth: '880px' }}>
+    <div className="container" style={{ paddingTop: '36px', paddingBottom: '80px', maxWidth: '820px' }}>
       {/* Profile Header */}
       <div
         style={{
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-xl)',
-          padding: '36px',
+          background: 'var(--bg-card)',
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-lg)',
+          padding: '32px',
           boxShadow: 'var(--shadow-sm)',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
-          gap: '24px',
-          marginBottom: '32px',
+          gap: '20px',
+          marginBottom: '28px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '18px' }}>
           <img
             src={user.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
             alt={user.name}
-            style={{ width: '72px', height: '72px', borderRadius: '50%', objectFit: 'cover', border: '3px solid var(--bg-subtle)' }}
+            style={{ width: '64px', height: '64px', borderRadius: '50%', objectFit: 'cover', border: '2px solid var(--color-primary)' }}
           />
           <div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-              <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)' }}>
-                {user.name}
-              </h1>
-              <span className="badge badge-accent">
-                <Sparkles size={12} /> Member
-              </span>
-            </div>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
+            <h1 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+              {user.name}
+            </h1>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-secondary)', fontSize: '0.9rem' }}>
               <Mail size={14} />
               <span>{user.email}</span>
             </div>
@@ -89,124 +88,108 @@ export default function Profile() {
         <button
           type="button"
           onClick={handleLogout}
-          className="btn btn-secondary"
-          style={{ color: 'var(--color-danger)', borderColor: 'var(--color-danger-border)' }}
+          className="btn btn-secondary btn-sm"
+          style={{ color: 'var(--color-danger)' }}
         >
           <LogOut size={16} /> Sign Out
         </button>
       </div>
 
       {/* Account Highlights Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '32px' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '18px', marginBottom: '32px' }}>
         <Link
           to="/orders"
           style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
-            padding: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
+            padding: '24px 20px',
+            textAlign: 'center',
+            textDecoration: 'none',
             boxShadow: 'var(--shadow-xs)',
           }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: 'var(--radius-sm)', background: 'var(--color-accent-light)', color: 'var(--color-accent)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Package size={24} />
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: 'rgba(255, 153, 0, 0.1)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <Package size={20} />
           </div>
-          <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>{orders.length}</div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Completed Orders</div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+            {orders.length}
+          </div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+            Total Orders
           </div>
         </Link>
 
         <Link
           to="/wishlist"
           style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
-            padding: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
+            padding: '24px 20px',
+            textAlign: 'center',
+            textDecoration: 'none',
             boxShadow: 'var(--shadow-xs)',
           }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: 'var(--radius-sm)', background: '#fee2e2', color: '#dc2626', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Heart size={24} />
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#FEF2F2', color: '#EF4444', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <Heart size={20} />
           </div>
-          <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>{totalWishlist}</div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Saved in Wishlist</div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+            {totalWishlist}
+          </div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+            Wishlist Items
           </div>
         </Link>
 
         <Link
           to="/cart"
           style={{
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--border-subtle)',
+            background: 'var(--bg-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: 'var(--radius-md)',
-            padding: '24px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '16px',
+            padding: '24px 20px',
+            textAlign: 'center',
+            textDecoration: 'none',
             boxShadow: 'var(--shadow-xs)',
           }}
         >
-          <div style={{ width: '48px', height: '48px', borderRadius: 'var(--radius-sm)', background: 'var(--bg-subtle)', color: 'var(--color-primary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ShoppingBag size={24} />
+          <div style={{ width: '40px', height: '40px', borderRadius: '50%', background: '#ECFDF5', color: '#10B981', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 12px' }}>
+            <ShoppingBag size={20} />
           </div>
-          <div>
-            <div style={{ fontSize: '1.4rem', fontWeight: 800 }}>{totalItems}</div>
-            <div style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Items in Bag</div>
+          <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '4px' }}>
+            {totalItems}
+          </div>
+          <div style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+            Cart Items
           </div>
         </Link>
       </div>
 
-      {/* Account Details Box */}
-      <div
-        style={{
-          background: 'var(--bg-surface)',
-          border: '1px solid var(--border-subtle)',
-          borderRadius: 'var(--radius-lg)',
-          padding: '32px',
-          boxShadow: 'var(--shadow-sm)',
-        }}
-      >
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 800, marginBottom: '20px', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
-          Account Security & Details
+      {/* Quick Navigation Links */}
+      <div style={{ background: 'var(--bg-card)', border: '1px solid var(--color-border)', borderRadius: 'var(--radius-md)', padding: '24px' }}>
+        <h3 style={{ fontSize: '1.1rem', fontWeight: 800, marginBottom: '16px', color: 'var(--color-text)' }}>
+          Quick Actions
         </h3>
-
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', fontSize: '0.925rem' }}>
-          <div>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Account ID:</span>
-            <code style={{ fontSize: '0.9rem', color: 'var(--text-main)', fontWeight: 600 }}>{user.id || 'AUR-USER-DEMO'}</code>
-          </div>
-
-          <div>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Registered Email:</span>
-            <span style={{ fontWeight: 600 }}>{user.email}</span>
-          </div>
-
-          <div>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Member Status:</span>
-            <span style={{ color: 'var(--color-accent)', fontWeight: 700 }}>Active • Verified Buyer</span>
-          </div>
-
-          <div>
-            <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Persistence Mode:</span>
-            <span>LocalStorage Synced (Browser Session)</span>
-          </div>
-        </div>
-
-        <div style={{ marginTop: '32px', display: 'flex', gap: '14px', flexWrap: 'wrap' }}>
-          <Link to="/orders" className="btn btn-primary">
-            <Package size={16} /> View Order History
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <Link to="/orders" className="btn btn-secondary" style={{ justifyContent: 'space-between', padding: '14px 18px' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Package size={18} /> View All Past Orders
+            </span>
+            <ArrowRight size={16} />
           </Link>
-          <Link to="/products" className="btn btn-secondary">
-            <ShoppingBag size={16} /> Browse Catalog
+          <Link to="/wishlist" className="btn btn-secondary" style={{ justifyContent: 'space-between', padding: '14px 18px' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <Heart size={18} /> My Saved Wishlist
+            </span>
+            <ArrowRight size={16} />
+          </Link>
+          <Link to="/shop" className="btn btn-primary" style={{ justifyContent: 'space-between', padding: '14px 18px' }}>
+            <span style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <ShoppingBag size={18} /> Browse Products
+            </span>
+            <ArrowRight size={16} />
           </Link>
         </div>
       </div>

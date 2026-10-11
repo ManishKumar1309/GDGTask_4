@@ -46,6 +46,7 @@ export const CartProvider = ({ children }) => {
             id: product.id,
             title: product.title,
             price: Number(product.price) || 0,
+            discountPercentage: product.discountPercentage || 0,
             thumbnail: product.thumbnail || (product.images && product.images[0]) || '',
             category: product.category || 'General',
             stock: product.stock || 99,
@@ -55,7 +56,7 @@ export const CartProvider = ({ children }) => {
       }
     });
 
-    addToast(`"${product.title}" added to your bag`, 'success');
+    addToast(`"${product.title}" added to your cart`, 'success');
   };
 
   /**
@@ -65,7 +66,7 @@ export const CartProvider = ({ children }) => {
     const item = cart.find((i) => i.id === productId);
     setCart((prev) => prev.filter((i) => i.id !== productId));
     if (showNotification && item) {
-      addToast(`Removed "${item.title}" from bag`, 'info');
+      addToast(`Removed "${item.title}" from cart`, 'info');
     }
   };
 
@@ -103,9 +104,12 @@ export const CartProvider = ({ children }) => {
   // Computations
   const totalItems = cart.reduce((acc, item) => acc + (item.quantity || 1), 0);
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-  // Free shipping threshold at $75
-  const shippingThreshold = 75;
-  const shippingCost = subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : 9.99;
+  
+  // Shipping rules:
+  // Free shipping for orders of ₹999 or above.
+  // ₹49 shipping for orders below ₹999.
+  const shippingThreshold = 999;
+  const shippingCost = subtotal === 0 ? 0 : subtotal >= shippingThreshold ? 0 : 49;
   const grandTotal = subtotal + shippingCost;
 
   return (

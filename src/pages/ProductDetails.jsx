@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import {
-  getProductById,
-  getProducts,
-} from '../services/api';
+import { getProductById, getProducts } from '../services/api';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { formatPrice } from '../utils/formatters';
+import { addRecentlyViewedProduct } from '../utils/storage';
 import QuantitySelector from '../components/QuantitySelector';
 import ProductGrid from '../components/ProductGrid';
 import { LoadingSpinner } from '../components/Loading';
@@ -14,14 +12,14 @@ import ErrorMessage from '../components/ErrorMessage';
 import {
   Heart,
   ShoppingBag,
+  Zap,
   Star,
-  ArrowLeft,
   Truck,
   ShieldCheck,
   RefreshCw,
   Check,
   PackageCheck,
-  UserCheck,
+  CheckCircle2,
 } from 'lucide-react';
 import './ProductDetails.css';
 
@@ -52,14 +50,17 @@ export default function ProductDetails() {
       setActiveImage(data.images && data.images[0] ? data.images[0] : data.thumbnail);
       setQuantity(1);
 
+      // Save to recently viewed
+      addRecentlyViewedProduct(data);
+
       // Fetch related products in the same category
       if (data.category) {
         try {
           const relatedRes = await getProducts({ category: data.category, limit: 5 });
-          const filtered = (relatedRes.products || []).filter((p) => p.id !== data.id);
+          const filtered = (relatedRes.products || []).filter((p) => String(p.id) !== String(data.id));
           setRelatedProducts(filtered.slice(0, 4));
         } catch {
-          // Non-critical, ignore
+          // Ignore
         }
       }
     } catch (err) {
@@ -89,12 +90,12 @@ export default function ProductDetails() {
 
   if (error === '404' || !product) {
     return (
-      <div className="container">
+      <div className="container" style={{ padding: '60px 20px' }}>
         <ErrorMessage
           title="Product Not Found"
-          message={`We couldn't locate any product matching ID "${id}". It may be discontinued or unavailable.`}
-          backTo="/products"
-          backText="Return to All Products"
+          message={`We couldn't locate any product matching ID "${id}". It may be unavailable or moved.`}
+          backTo="/shop"
+          backText="Return to Shop"
         />
       </div>
     );
@@ -102,13 +103,13 @@ export default function ProductDetails() {
 
   if (error) {
     return (
-      <div className="container">
+      <div className="container" style={{ padding: '60px 20px' }}>
         <ErrorMessage
           title="Failed to Load Product"
           message={error}
           onRetry={fetchDetails}
-          backTo="/products"
-          backText="Back to Products"
+          backTo="/shop"
+          backText="Back to Shop"
         />
       </div>
     );
@@ -116,7 +117,7 @@ export default function ProductDetails() {
 
   const isFavorited = isInWishlist(product.id);
   const discount = Math.round(product.discountPercentage || 0);
-  const originalPrice = discount > 0 ? product.price / (1 - discount / 100) : null;
+  const originalPrice = discount > 0 ? Math.round(product.price / (1 - discount / 100)) : null;
   const imageGallery = product.images && product.images.length > 0 ? product.images : [product.thumbnail];
 
   const handleAddToCart = () => {
@@ -127,91 +128,102 @@ export default function ProductDetails() {
     }, 600);
   };
 
+  const handleBuyNow = () => {
+    addToCart(product, quantity);
+    navigate('/checkout');
+  };
+
   return (
-    <div className="container product-details-container">
+    <div className="container product-details-wrapper">
       {/* Breadcrumb Navigation */}
       <nav className="details-breadcrumb" aria-label="Breadcrumb">
         <Link to="/">Home</Link>
         <span>/</span>
-        <Link to="/products">Products</Link>
+        <Link to="/shop">Shop</Link>
         <span>/</span>
-        <Link to={`/products?category=${product.category}`}>{product.category}</Link>
+        <Link to={`/shop?category=${product.category}`}>{product.category}</Link>
         <span>/</span>
-        <span style={{ color: 'var(--text-main)', fontWeight: 600 }}>{product.title}</span>
+        <span className="breadcrumb-current">{product.title}</span>
       </nav>
 
-      {/* Main Grid: Gallery & Info */}
-      <div className="details-main-grid">
-        {/* Left: Product Images Gallery */}
-        <div className="gallery-wrapper">
-          <div className="gallery-main-view">
+      {/* Main Two-Column Layout */}
+      <div className="details-grid">
+        {/* Left Column: Image Gallery and Thumbnails */}
+        <div className="details-gallery-col">
+          <div className="main-image-frame">
             <img
               src={activeImage || product.thumbnail}
               alt={product.title}
-              className="gallery-main-img"
+              className="main-preview-img"
             />
+            {discount > 0 && (
+              <span className="details-badge-discount">{discount}% OFF</span>
+            )}
           </div>
 
+          {/* Thumbnails */}
           {imageGallery.length > 1 && (
-            <div className="gallery-thumbs-row">
+            <div className="thumbnails-row">
               {imageGallery.map((img, idx) => (
                 <button
                   key={idx}
                   type="button"
                   onClick={() => setActiveImage(img)}
-                  className={`gallery-thumb-btn ${activeImage === img ? 'active' : ''}`}
-                  aria-label={`View image ${idx + 1}`}
+                  className={`thumb-btn ${activeImage === img ? 'active' : ''}`}
+                  aria-label={`Thumbnail image ${idx + 1}`}
                 >
-                  <img src={img} alt={`${product.title} preview ${idx + 1}`} />
+                  <img src={img} alt={`${product.title} view ${idx + 1}`} />
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        {/* Right: Product Information & Purchase Controls */}
+        {/* Right Column: Product Information & Purchase Controls */}
         <div className="details-info-col">
-          <span className="details-category-pill">{product.category}</span>
+          <span className="details-category-tag">{product.category}</span>
           <h1 className="details-title">{product.title}</h1>
 
-          {/* Rating & Review Count */}
-          <div className="details-rating-row">
-            <div className="details-stars">
-              <Star size={16} fill="#d97706" color="#d97706" />
+          {/* Rating & Stock Status */}
+          <div className="details-meta-row">
+            <div className="stars-rating-badge">
+              <Star size={15} fill="#F59E0B" color="#F59E0B" />
               <span>{Number(product.rating || 4.5).toFixed(1)}</span>
             </div>
-            <span style={{ color: 'var(--border-strong)' }}>|</span>
-            <span className="details-review-count">
+            <span className="meta-sep">•</span>
+            <span className="reviews-count-label">
               {product.reviews && product.reviews.length > 0
                 ? `${product.reviews.length} Customer Reviews`
-                : '18 Verified Ratings'}
+                : 'Verified Customer Ratings'}
             </span>
-            <span style={{ color: 'var(--border-strong)' }}>|</span>
-            <span style={{ fontSize: '0.85rem', color: '#059669', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '4px' }}>
-              <PackageCheck size={14} /> In Stock ({product.stock} units)
+            <span className="meta-sep">•</span>
+            <span className="stock-in-label">
+              <PackageCheck size={15} /> In Stock ({product.stock} left)
             </span>
           </div>
 
-          {/* Price Box */}
-          <div className="details-price-box">
-            <span className="details-price">{formatPrice(product.price)}</span>
+          {/* Pricing Row: Current price in ₹, Original price, Discount */}
+          <div className="details-price-container">
+            <span className="current-price-display">{formatPrice(product.price)}</span>
             {originalPrice && (
-              <span className="details-original-price">
+              <span className="original-price-display">
                 {formatPrice(originalPrice)}
               </span>
             )}
             {discount > 0 && (
-              <span className="badge badge-sale">Save {discount}%</span>
+              <span className="save-amount-badge">Save {discount}%</span>
             )}
           </div>
 
-          {/* Description */}
-          <p className="details-description">{product.description}</p>
+          {/* Short Description */}
+          <p className="details-description-text">{product.description}</p>
 
           {/* Quantity Selector & Action Buttons */}
-          <div className="details-actions-wrapper">
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <span style={{ fontWeight: 600, fontSize: '0.9rem' }}>Quantity:</span>
+          <div className="details-buy-section">
+            <div className="quantity-select-row">
+              <span style={{ fontWeight: 600, fontSize: '0.9rem', color: 'var(--color-text)' }}>
+                Quantity:
+              </span>
               <QuantitySelector
                 value={quantity}
                 onChange={setQuantity}
@@ -220,127 +232,135 @@ export default function ProductDetails() {
               />
             </div>
 
-            <div className="details-action-buttons">
+            {/* Prominent Purchase Buttons */}
+            <div className="action-buttons-group">
+              {/* Add to Cart button */}
               <button
                 type="button"
                 onClick={handleAddToCart}
                 disabled={addingToCart}
-                className="btn btn-primary btn-lg"
+                className="btn btn-secondary btn-lg"
                 style={{ flex: 1, gap: '8px' }}
               >
                 {addingToCart ? (
                   <>
                     <Check size={18} />
-                    <span>Adding to Bag...</span>
+                    <span>Adding to Cart...</span>
                   </>
                 ) : (
                   <>
                     <ShoppingBag size={18} />
-                    <span>Add to Bag</span>
+                    <span>Add to Cart</span>
                   </>
                 )}
               </button>
 
+              {/* Buy Now button */}
+              <button
+                type="button"
+                onClick={handleBuyNow}
+                className="btn btn-primary btn-lg"
+                style={{ flex: 1, gap: '8px' }}
+              >
+                <Zap size={18} />
+                <span>Buy Now</span>
+              </button>
+
+              {/* Wishlist Icon Button */}
               <button
                 type="button"
                 onClick={() => toggleWishlist(product)}
-                className={`btn btn-secondary btn-lg ${isFavorited ? 'active' : ''}`}
-                style={{
-                  color: isFavorited ? '#dc2626' : 'var(--text-main)',
-                  borderColor: isFavorited ? '#fca5a5' : 'var(--border-subtle)',
-                  padding: '12px 18px',
-                }}
+                className={`btn-icon ${isFavorited ? 'wishlist-active' : ''}`}
+                style={{ width: '50px', height: '50px', flexShrink: 0 }}
+                title={isFavorited ? "Remove from Wishlist" : "Save to Wishlist"}
                 aria-label="Wishlist toggle"
               >
                 <Heart
-                  size={20}
-                  fill={isFavorited ? '#dc2626' : 'none'}
+                  size={22}
+                  fill={isFavorited ? '#EF4444' : 'none'}
+                  color={isFavorited ? '#EF4444' : 'var(--color-text)'}
                 />
               </button>
             </div>
-
-            <Link
-              to="/products"
-              className="btn btn-ghost"
-              style={{ width: 'fit-content', padding: '6px 0', fontSize: '0.9rem' }}
-            >
-              <ArrowLeft size={16} /> Back to All Products
-            </Link>
           </div>
 
           {/* Trust Guarantees */}
-          <div className="details-trust-bullets">
-            <div className="trust-bullet-item">
-              <Truck size={18} color="var(--color-accent)" />
-              <span>{product.shippingInformation || 'Free delivery over $75'}</span>
+          <div className="details-guarantees-row">
+            <div className="guarantee-chip">
+              <Truck size={16} />
+              <span>Free Delivery over ₹999</span>
             </div>
-            <div className="trust-bullet-item">
-              <RefreshCw size={18} color="var(--color-accent)" />
-              <span>{product.returnPolicy || '30-Day Money Back Guarantee'}</span>
+            <div className="guarantee-chip">
+              <RefreshCw size={16} />
+              <span>7-Day Replacement</span>
             </div>
-            <div className="trust-bullet-item">
-              <ShieldCheck size={18} color="var(--color-accent)" />
-              <span>{product.warrantyInformation || '1-Year Official Warranty'}</span>
+            <div className="guarantee-chip">
+              <ShieldCheck size={16} />
+              <span>100% Genuine</span>
             </div>
-            <div className="trust-bullet-item">
-              <Check size={18} color="var(--color-accent)" />
-              <span>100% Guaranteed Authentic</span>
+          </div>
+
+          {/* Product Specifications Table */}
+          <div className="specifications-box">
+            <h3 className="specs-title">Product Specifications</h3>
+            <div className="specs-table">
+              {Object.entries(product.specs || {}).map(([key, value]) => (
+                <div key={key} className="specs-row">
+                  <span className="specs-key">{key}</span>
+                  <span className="specs-value">{value}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
 
       {/* Customer Reviews Section */}
-      <section className="details-reviews-section">
-        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--text-main)' }}>
-          Customer Reviews & Feedback
+      <section className="reviews-section">
+        <h2 className="section-title" style={{ marginBottom: '20px' }}>
+          Customer Reviews ({product.reviews?.length || 0})
         </h2>
 
         {product.reviews && product.reviews.length > 0 ? (
           <div className="reviews-grid">
             {product.reviews.map((rev, idx) => (
               <div key={idx} className="review-card">
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--bg-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                      <UserCheck size={16} color="var(--color-accent)" />
-                    </div>
-                    <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>
-                      {rev.reviewerName || 'Verified Buyer'}
+                <div className="review-header">
+                  <div className="review-user-info">
+                    <strong className="reviewer-name">{rev.reviewerName}</strong>
+                    <span className="verified-badge">
+                      <CheckCircle2 size={13} /> Verified Buyer
                     </span>
                   </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '2px', color: '#d97706' }}>
-                    <Star size={13} fill="#d97706" />
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700 }}>{rev.rating || 5}</span>
+                  <div className="review-stars">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        size={14}
+                        fill={i < Math.floor(rev.rating) ? '#F59E0B' : 'none'}
+                        color={i < Math.floor(rev.rating) ? '#F59E0B' : 'var(--color-border)'}
+                      />
+                    ))}
                   </div>
                 </div>
-                <p style={{ fontSize: '0.9rem', color: 'var(--text-secondary)', lineHeight: 1.5, fontStyle: 'italic' }}>
-                  "{rev.comment}"
-                </p>
-                {rev.date && (
-                  <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                    {new Date(rev.date).toLocaleDateString()}
-                  </span>
-                )}
+                <p className="review-comment">"{rev.comment}"</p>
+                <span className="review-date">{rev.date}</span>
               </div>
             ))}
           </div>
         ) : (
-          <p style={{ color: 'var(--text-secondary)', marginTop: '12px' }}>
-            No written reviews yet. Be the first to order and share your thoughts!
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem' }}>
+            No customer reviews yet. Be the first to leave a review after your purchase!
           </p>
         )}
       </section>
 
-      {/* Related Products from same category */}
+      {/* Related Products Section */}
       {relatedProducts.length > 0 && (
-        <section style={{ marginTop: '72px', borderTop: '1px solid var(--border-subtle)', paddingTop: '48px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
-            <h2 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Related Products</h2>
-            <Link to={`/products?category=${product.category}`} className="btn btn-secondary btn-sm">
-              Explore More {product.category}
-            </Link>
-          </div>
+        <section className="related-section" style={{ marginTop: '60px' }}>
+          <h2 className="section-title" style={{ marginBottom: '24px' }}>
+            Related Products
+          </h2>
           <ProductGrid products={relatedProducts} />
         </section>
       )}

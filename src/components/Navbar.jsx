@@ -2,20 +2,22 @@ import React, { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import {
   ShoppingBag,
+  ShoppingCart,
   Heart,
   User,
   Search,
   Menu,
   X,
-  Package,
-  Sparkles,
+  Moon,
+  Sun,
+  ChevronDown,
   ChevronRight,
   LogOut,
 } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
 import { useAuth } from '../context/AuthContext';
-import SearchBar from './SearchBar';
+import { useTheme } from '../context/ThemeContext';
 import './Navbar.css';
 
 export default function Navbar() {
@@ -23,102 +25,156 @@ export default function Navbar() {
   const { totalItems } = useCart();
   const { totalWishlist } = useWishlist();
   const { user, isAuthenticated, logout } = useAuth();
+  const { toggleTheme, isDark } = useTheme();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categoriesDropdownOpen, setCategoriesDropdownOpen] = useState(false);
   const [navSearch, setNavSearch] = useState('');
 
-  const handleSearchSubmit = (query) => {
-    if (query && query.trim()) {
-      navigate(`/products?search=${encodeURIComponent(query.trim())}`);
+  const categories = [
+    { name: 'Electronics', slug: 'electronics' },
+    { name: 'Fashion', slug: 'fashion' },
+    { name: 'Home & Living', slug: 'home-living' },
+    { name: 'Accessories', slug: 'accessories' },
+    { name: 'Beauty', slug: 'beauty' },
+    { name: 'Sports', slug: 'sports' },
+  ];
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (navSearch && navSearch.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(navSearch.trim())}`);
       setMobileMenuOpen(false);
       setNavSearch('');
     }
   };
 
+  const handleCategoryClick = (slug) => {
+    navigate(`/shop?category=${slug}`);
+    setCategoriesDropdownOpen(false);
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="navbar-wrapper">
-      {/* Top Announcement Bar */}
-      <div className="announcement-bar">
-        <Sparkles size={14} color="#34d399" />
-        <span>Complimentary Express Shipping on orders over $75 | 30-Day Effortless Returns</span>
-      </div>
-
-      {/* Main Bar */}
       <div className="container">
         <div className="main-navbar">
-          {/* Left: Brand Logo & Links */}
+          {/* 1. Shopora Logo */}
           <div className="nav-left">
-            <Link to="/" className="brand-logo" aria-label="AURA Store Home">
-              <div className="brand-symbol">
-                <ShoppingBag size={20} strokeWidth={2.4} />
+            <Link to="/" className="brand-logo" aria-label="Shopora Home">
+              <div className="brand-icon">
+                <ShoppingBag size={22} strokeWidth={2.4} />
               </div>
-              <div className="brand-text">
-                <span className="brand-name">AURA</span>
-                <span className="brand-subtitle">COMMERCE</span>
-              </div>
+              <span className="brand-name">
+                Shopora<span className="brand-dot">.</span>
+              </span>
             </Link>
 
-            <nav className="nav-links" aria-label="Primary Navigation">
+            {/* Desktop Navigation Links */}
+            <nav className="desktop-nav-links" aria-label="Main Navigation">
               <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`} end>
                 Home
               </NavLink>
-              <NavLink to="/products" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                Catalog
+              <NavLink to="/shop" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
+                Shop
               </NavLink>
-              <NavLink to="/orders" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>
-                Orders
-              </NavLink>
+
+              {/* Categories Dropdown */}
+              <div
+                className="categories-menu-container"
+                onMouseEnter={() => setCategoriesDropdownOpen(true)}
+                onMouseLeave={() => setCategoriesDropdownOpen(false)}
+              >
+                <button
+                  type="button"
+                  className="nav-link categories-trigger"
+                  onClick={() => setCategoriesDropdownOpen(!categoriesDropdownOpen)}
+                  aria-expanded={categoriesDropdownOpen}
+                >
+                  <span>Categories</span>
+                  <ChevronDown size={15} className={`chevron-icon ${categoriesDropdownOpen ? 'rotated' : ''}`} />
+                </button>
+
+                {categoriesDropdownOpen && (
+                  <div className="categories-dropdown">
+                    {categories.map((cat) => (
+                      <button
+                        key={cat.slug}
+                        type="button"
+                        className="category-dropdown-item"
+                        onClick={() => handleCategoryClick(cat.slug)}
+                      >
+                        {cat.name}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
             </nav>
           </div>
 
-          {/* Center: Search Bar */}
-          <div className="nav-search-container">
-            <SearchBar
-              value={navSearch}
-              onChange={setNavSearch}
-              onSearch={handleSearchSubmit}
-              placeholder="Search products, brands..."
-            />
+          {/* 2. Search Bar */}
+          <div className="nav-search-wrapper">
+            <form onSubmit={handleSearchSubmit} className="nav-search-form">
+              <Search size={18} className="search-icon" />
+              <input
+                type="text"
+                value={navSearch}
+                onChange={(e) => setNavSearch(e.target.value)}
+                placeholder="Search products, brands and essentials..."
+                className="nav-search-input"
+                aria-label="Search products"
+              />
+            </form>
           </div>
 
-          {/* Right: Actions */}
-          <div className="nav-right">
-            {/* Wishlist Link */}
+          {/* 3. Action Icons */}
+          <div className="nav-actions">
+            {/* Theme Toggle Button */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="nav-icon-btn"
+              title={isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
+              aria-label="Toggle theme mode"
+            >
+              {isDark ? <Sun size={20} color="#FF9900" /> : <Moon size={20} />}
+            </button>
+
+            {/* Wishlist Icon */}
             <Link
               to="/wishlist"
-              className="nav-action-btn"
+              className="nav-icon-btn"
               title="Wishlist"
-              aria-label={`Wishlist (${totalWishlist} items)`}
+              aria-label={`Wishlist with ${totalWishlist} items`}
             >
               <Heart size={21} />
-              {totalWishlist > 0 && <span className="nav-badge-count">{totalWishlist}</span>}
+              {totalWishlist > 0 && <span className="nav-badge">{totalWishlist}</span>}
             </Link>
 
-            {/* Cart Link */}
+            {/* Flipkart-Style Shopping Trolley Cart Icon */}
             <Link
               to="/cart"
-              className="nav-action-btn"
-              title="Shopping Bag"
-              aria-label={`Shopping Bag (${totalItems} items)`}
+              className="nav-icon-btn cart-btn"
+              title="Shopping Cart"
+              aria-label={`Shopping Cart with ${totalItems} items`}
             >
-              <ShoppingBag size={21} />
-              {totalItems > 0 && <span className="nav-badge-count">{totalItems}</span>}
+              <ShoppingCart size={22} strokeWidth={2.2} />
+              {totalItems > 0 && <span className="nav-badge">{totalItems}</span>}
             </Link>
 
-            {/* User Profile / Auth */}
+            {/* Account Icon */}
             {isAuthenticated ? (
-              <Link to="/profile" className="user-profile-badge" title="My Profile">
+              <Link to="/profile" className="user-profile-btn" title="My Account">
                 <img
                   src={user.avatar || `https://api.dicebear.com/7.x/initials/svg?seed=${user.name}`}
                   alt={user.name}
-                  className="user-avatar"
+                  className="user-nav-avatar"
                 />
-                <span style={{ maxWidth: '85px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                  {user.name}
-                </span>
+                <span className="user-nav-name">{user.name.split(' ')[0]}</span>
               </Link>
             ) : (
-              <Link to="/login" className="nav-action-btn" title="Sign In" aria-label="Sign In">
+              <Link to="/login" className="nav-icon-btn" title="Account Sign In" aria-label="Sign In">
                 <User size={21} />
               </Link>
             )}
@@ -127,8 +183,8 @@ export default function Navbar() {
             <button
               type="button"
               onClick={() => setMobileMenuOpen(true)}
-              className="mobile-menu-btn"
-              aria-label="Open mobile navigation"
+              className="mobile-hamburger-btn"
+              aria-label="Open mobile navigation menu"
             >
               <Menu size={24} />
             </button>
@@ -136,20 +192,20 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Drawer Navigation */}
+      {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
         <>
-          <div className="mobile-nav-overlay" onClick={() => setMobileMenuOpen(false)} />
-          <div className="mobile-nav-drawer" role="dialog" aria-label="Mobile Navigation">
-            <div className="mobile-nav-header">
-              <div className="brand-logo">
-                <div className="brand-symbol">
-                  <ShoppingBag size={18} />
+          <div className="mobile-overlay" onClick={() => setMobileMenuOpen(false)} />
+          <div className="mobile-drawer" role="dialog" aria-label="Mobile Navigation">
+            <div className="mobile-drawer-header">
+              <Link to="/" className="brand-logo" onClick={() => setMobileMenuOpen(false)}>
+                <div className="brand-icon">
+                  <ShoppingBag size={20} strokeWidth={2.4} />
                 </div>
-                <div className="brand-text">
-                  <span className="brand-name" style={{ fontSize: '1.15rem' }}>AURA</span>
-                </div>
-              </div>
+                <span className="brand-name">
+                  Shopora<span className="brand-dot">.</span>
+                </span>
+              </Link>
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(false)}
@@ -161,85 +217,98 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Search */}
-            <div style={{ marginBottom: '16px' }}>
-              <SearchBar
-                value={navSearch}
-                onChange={setNavSearch}
-                onSearch={handleSearchSubmit}
-                placeholder="Search catalog..."
-              />
+            <div className="mobile-search-box">
+              <form onSubmit={handleSearchSubmit} className="nav-search-form">
+                <Search size={18} className="search-icon" />
+                <input
+                  type="text"
+                  value={navSearch}
+                  onChange={(e) => setNavSearch(e.target.value)}
+                  placeholder="Search products..."
+                  className="nav-search-input"
+                />
+              </form>
             </div>
 
-            {/* Mobile Navigation Links */}
-            <nav className="mobile-nav-links">
-              <Link
-                to="/"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+            {/* Mobile Nav Links */}
+            <nav className="mobile-nav-list">
+              <Link to="/" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
                 <span>Home</span>
-                <ChevronRight size={16} color="var(--text-muted)" />
+                <ChevronRight size={18} color="var(--color-text-secondary)" />
               </Link>
 
-              <Link
-                to="/products"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span>All Products</span>
-                <ChevronRight size={16} color="var(--text-muted)" />
+              <Link to="/shop" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>Shop All Products</span>
+                <ChevronRight size={18} color="var(--color-text-secondary)" />
               </Link>
 
-              <Link
-                to="/orders"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
+              <Link to="/orders" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>My Orders</span>
+                <ChevronRight size={18} color="var(--color-text-secondary)" />
+              </Link>
+
+              <Link to="/wishlist" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
+                <span>Wishlist ({totalWishlist})</span>
+                <ChevronRight size={18} color="var(--color-text-secondary)" />
+              </Link>
+
+              <Link to="/cart" className="mobile-nav-item" onClick={() => setMobileMenuOpen(false)}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Package size={18} /> My Orders
+                  <ShoppingCart size={18} />
+                  <span>Shopping Cart ({totalItems})</span>
                 </span>
-                <ChevronRight size={16} color="var(--text-muted)" />
+                <ChevronRight size={18} color="var(--color-text-secondary)" />
               </Link>
 
-              <Link
-                to="/wishlist"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Heart size={18} /> Wishlist ({totalWishlist})
-                </span>
-                <ChevronRight size={16} color="var(--text-muted)" />
-              </Link>
-
-              <Link
-                to="/cart"
-                className="mobile-nav-link"
-                onClick={() => setMobileMenuOpen(false)}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <ShoppingBag size={18} /> Shopping Bag ({totalItems})
-                </span>
-                <ChevronRight size={16} color="var(--text-muted)" />
-              </Link>
+              <div className="mobile-categories-section">
+                <div className="mobile-section-title">Shop by Category</div>
+                <div className="mobile-categories-grid">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.slug}
+                      type="button"
+                      className="mobile-category-chip"
+                      onClick={() => handleCategoryClick(cat.slug)}
+                    >
+                      {cat.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </nav>
 
-            {/* Mobile Auth Section at Bottom */}
-            <div style={{ marginTop: 'auto', paddingTop: '20px', borderTop: '1px solid var(--border-subtle)' }}>
+            {/* Mobile Footer with Account & Theme */}
+            <div className="mobile-drawer-footer">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                <span style={{ fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontWeight: 600 }}>
+                  Theme Mode
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleTheme}
+                  className="btn btn-secondary btn-sm"
+                  style={{ gap: '6px' }}
+                >
+                  {isDark ? <Sun size={16} color="#FF9900" /> : <Moon size={16} />}
+                  <span>{isDark ? 'Light Mode' : 'Dark Mode'}</span>
+                </button>
+              </div>
+
               {isAuthenticated ? (
                 <div>
                   <Link
                     to="/profile"
                     onClick={() => setMobileMenuOpen(false)}
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}
+                    style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}
                   >
-                    <img src={user.avatar} alt={user.name} className="user-avatar" style={{ width: '36px', height: '36px' }} />
+                    <img src={user.avatar} alt={user.name} className="user-nav-avatar" style={{ width: '40px', height: '40px' }} />
                     <div>
                       <div style={{ fontWeight: 700, fontSize: '0.95rem' }}>{user.name}</div>
-                      <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>{user.email}</div>
+                      <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)' }}>{user.email}</div>
                     </div>
                   </Link>
                   <button
+                    type="button"
                     onClick={() => {
                       logout();
                       setMobileMenuOpen(false);
@@ -247,18 +316,28 @@ export default function Navbar() {
                     className="btn btn-secondary btn-sm"
                     style={{ width: '100%', color: 'var(--color-danger)' }}
                   >
-                    <LogOut size={15} /> Sign Out
+                    <LogOut size={16} /> Sign Out
                   </button>
                 </div>
               ) : (
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="btn btn-primary"
-                  style={{ width: '100%' }}
-                >
-                  <User size={18} /> Sign In to Account
-                </Link>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <Link
+                    to="/login"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="btn btn-primary btn-md"
+                    style={{ flex: 1 }}
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    to="/signup"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="btn btn-secondary btn-md"
+                    style={{ flex: 1 }}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
               )}
             </div>
           </div>

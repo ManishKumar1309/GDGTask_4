@@ -1,48 +1,41 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Sparkles,
-  ArrowRight,
-  TrendingUp,
-  Star,
-  CheckCircle,
-  Award,
-  Flame,
-  Tag,
-  Copy,
-  Check,
-  ShoppingBag,
-  Sparkle,
-  Compass,
-} from 'lucide-react';
-import { getProducts } from '../services/api';
+import { ArrowRight, Tag, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { getProducts, getCategories } from '../services/api';
 import ProductGrid from '../components/ProductGrid';
 import { ProductSkeletonGrid } from '../components/Loading';
 import ErrorMessage from '../components/ErrorMessage';
-import { useNotification } from '../context/NotificationContext';
+import { getRecentlyViewedProducts } from '../utils/storage';
+import ProductCard from '../components/ProductCard';
 import './Home.css';
 
 export default function Home() {
-  const { addToast } = useNotification();
   const [featuredProducts, setFeaturedProducts] = useState([]);
-  const [trendingProducts, setTrendingProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [recentlyViewed, setRecentlyViewed] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [copiedCode, setCopiedCode] = useState(false);
+  const [heroImageSrc, setHeroImageSrc] = useState(
+    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=1200&auto=format&fit=crop&q=80'
+  );
+
+  const fallbackHeroImage =
+    'https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=1200&auto=format&fit=crop&q=80';
 
   const fetchHomeData = async () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await getProducts({ limit: 16 });
-      const all = res.products || [];
-      // Split into featured (e.g. highest rating) and trending
-      const sortedByRating = [...all].sort((a, b) => b.rating - a.rating);
-      setFeaturedProducts(sortedByRating.slice(0, 8));
-      setTrendingProducts(all.slice(8, 16));
+      const [prodRes, catRes] = await Promise.all([
+        getProducts({ limit: 8 }),
+        getCategories(),
+      ]);
+      setFeaturedProducts(prodRes.products || []);
+      setCategories(catRes || []);
+      setRecentlyViewed(getRecentlyViewedProducts());
     } catch (err) {
       console.error('Home page data error:', err);
-      setError('Failed to load featured products. Please check your internet connection and try again.');
+      setError('Failed to load featured products. Please check your connection and try again.');
     } finally {
       setLoading(false);
     }
@@ -52,128 +45,92 @@ export default function Home() {
     fetchHomeData();
   }, []);
 
-  const handleCopyCode = () => {
-    navigator.clipboard?.writeText('AURA20');
-    setCopiedCode(true);
-    addToast('Coupon code "AURA20" copied to clipboard!', 'success');
-    setTimeout(() => setCopiedCode(false), 2500);
-  };
-
-  const topCategories = [
-    { slug: 'beauty', name: 'Beauty & Skincare', count: '10+ items', icon: '✨' },
-    { slug: 'fragrances', name: 'Luxury Fragrance', count: '8+ items', icon: '🌿' },
-    { slug: 'furniture', name: 'Modern Living', count: '12+ items', icon: '🛋️' },
-    { slug: 'groceries', name: 'Artisan Gourmet', count: '15+ items', icon: '🍇' },
-  ];
-
   return (
-    <div className="home-page">
-      {/* 1. Hero Section */}
+    <div className="home-container">
+      {/* 1. HERO SECTION */}
       <section className="hero-section">
         <div className="container">
           <div className="hero-grid">
-            <div className="hero-content">
-              <div className="hero-pill">
-                <Sparkles size={14} />
-                <span>Shopify-Inspired Modern Architecture</span>
-              </div>
-
+            {/* Left Column: Headline, Supporting Text, and Action Buttons */}
+            <div className="hero-left">
               <h1 className="hero-title">
-                Curated Design For <span>Modern Living</span>
+                Good Finds. Great Prices.
               </h1>
-
-              <p className="hero-desc">
-                Elevate your daily routine with meticulously sourced lifestyle, beauty, and home essentials. Experience seamless checkout, real-time persistence, and effortless shopping.
+              <p className="hero-subtitle">
+                Discover products you'll love, from everyday tech to little upgrades for your home and lifestyle.
               </p>
-
-              <div className="hero-actions">
-                <Link to="/products" className="btn btn-accent btn-lg">
-                  <span>Explore Catalog</span>
+              <div className="hero-btn-group">
+                <Link to="/shop" className="btn btn-primary btn-lg">
+                  <span>Shop Now</span>
                   <ArrowRight size={18} />
                 </Link>
-                <a href="#featured" className="btn btn-secondary btn-lg" style={{ background: 'rgba(255,255,255,0.12)', color: '#fff', border: '1px solid rgba(255,255,255,0.2)' }}>
-                  View Best Sellers
+                <a href="#categories" className="btn btn-secondary btn-lg">
+                  Explore Categories
                 </a>
               </div>
 
-              <div className="hero-stats">
-                <div className="stat-item">
-                  <h4>10k+</h4>
-                  <p>Delighted Customers</p>
+              {/* Tasteful reassurance micro-detail */}
+              <div className="hero-trust-bar">
+                <div className="hero-trust-item">
+                  <CheckCircle2 size={16} className="hero-trust-icon" />
+                  <span>Free Delivery &gt; ₹999</span>
                 </div>
-                <div className="stat-item">
-                  <h4>4.9 ★</h4>
-                  <p>Customer Rating</p>
+                <span className="hero-trust-dot">•</span>
+                <div className="hero-trust-item">
+                  <CheckCircle2 size={16} className="hero-trust-icon" />
+                  <span>100% Genuine</span>
                 </div>
-                <div className="stat-item">
-                  <h4>100%</h4>
-                  <p>Secure Simulated Checkout</p>
+                <span className="hero-trust-dot">•</span>
+                <div className="hero-trust-item">
+                  <CheckCircle2 size={16} className="hero-trust-icon" />
+                  <span>7-Day Easy Returns</span>
                 </div>
               </div>
             </div>
 
-            {/* Visual Column */}
-            <div className="hero-visual">
-              <div className="hero-image-card">
+            {/* Right Column: Real, high-quality editorial lifestyle shopping photograph */}
+            <div className="hero-right">
+              <div className="hero-image-wrapper">
                 <img
-                  src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&auto=format&fit=crop&q=80"
-                  alt="Aura Lifestyle Showcase"
-                  className="hero-image-display"
+                  src={heroImageSrc}
+                  alt="Curated lifestyle products and modern store collection"
+                  className="hero-image"
+                  loading="eager"
+                  onError={() => setHeroImageSrc(fallbackHeroImage)}
                 />
-
-                <div className="hero-badge-float hero-badge-float-left">
-                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#ecfdf5', color: '#059669', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <CheckCircle size={20} />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Free Express Delivery</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>On orders over $75</div>
-                  </div>
-                </div>
-
-                <div className="hero-badge-float hero-badge-float-right">
-                  <div style={{ width: '38px', height: '38px', borderRadius: '50%', background: '#fef3c7', color: '#d97706', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Star size={20} fill="#d97706" />
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '0.85rem', fontWeight: 800 }}>Verified Reviews</div>
-                    <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Over 4,500 reviews</div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 2. Featured Categories Section */}
-      <section className="section-padding" style={{ background: 'var(--bg-surface)' }}>
+      {/* 2. CATEGORIES SECTION */}
+      <section id="categories" className="categories-section">
         <div className="container">
           <div className="section-header">
             <div>
-              <span className="badge badge-accent" style={{ marginBottom: '8px' }}>Collections</span>
-              <h2 className="section-title">Explore by Category</h2>
-              <p className="section-subtitle">Browse hand-selected products organized by department.</p>
+              <h2 className="section-title">Shop by Category</h2>
+              <p className="section-subtitle">Explore top collections curated for your daily lifestyle</p>
             </div>
-            <Link to="/products" className="btn btn-secondary btn-sm">
-              <span>View All Categories</span>
-              <ArrowRight size={14} />
+            <Link to="/shop" className="view-all-link">
+              <span>View All</span>
+              <ChevronRight size={16} />
             </Link>
           </div>
 
           <div className="categories-grid">
-            {topCategories.map((cat) => (
+            {categories.map((cat) => (
               <Link
                 key={cat.slug}
-                to={`/products?category=${cat.slug}`}
+                to={`/shop?category=${cat.slug}`}
                 className="category-card"
               >
-                <div className="category-icon-circle" style={{ fontSize: '1.6rem' }}>
-                  {cat.icon}
+                <div className="category-img-wrapper">
+                  <img src={cat.image} alt={cat.name} className="category-img" />
                 </div>
-                <div>
+                <div className="category-card-content">
                   <h3 className="category-name">{cat.name}</h3>
-                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>{cat.count}</span>
+                  <span className="category-count">{cat.count}</span>
                 </div>
               </Link>
             ))}
@@ -181,98 +138,72 @@ export default function Home() {
         </div>
       </section>
 
-      {/* 3. Featured Products */}
-      <section id="featured" className="section-padding">
+      {/* 3. FEATURED PRODUCTS SECTION */}
+      <section className="featured-section">
         <div className="container">
           <div className="section-header">
             <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                <Award size={18} color="var(--color-accent)" />
-                <span className="badge badge-accent">Curated Selection</span>
-              </div>
               <h2 className="section-title">Featured Products</h2>
-              <p className="section-subtitle">Top-rated items favored by our community of design enthusiasts.</p>
+              <p className="section-subtitle">Handpicked customer favorites with exceptional ratings</p>
             </div>
-            <Link to="/products" className="btn btn-secondary btn-sm">
-              <span>Shop All Products</span>
-              <ArrowRight size={14} />
+            <Link to="/shop" className="view-all-link">
+              <span>Explore All Products</span>
+              <ChevronRight size={16} />
             </Link>
           </div>
 
           {loading ? (
             <ProductSkeletonGrid count={8} />
           ) : error ? (
-            <ErrorMessage
-              title="Unable to load products"
-              message={error}
-              onRetry={fetchHomeData}
-            />
+            <ErrorMessage title="Unable to load products" message={error} onRetry={fetchHomeData} />
           ) : (
             <ProductGrid products={featuredProducts} />
           )}
         </div>
       </section>
 
-      {/* 4. Promotional Banner Section */}
-      <section className="section-padding" style={{ paddingTop: '20px', paddingBottom: '60px' }}>
+      {/* 4. SMALL PROMOTIONAL BANNER */}
+      <section className="promo-banner-section">
         <div className="container">
           <div className="promo-banner">
-            <div>
-              <span className="badge badge-dark" style={{ background: 'rgba(0,0,0,0.3)', color: '#fff', marginBottom: '12px' }}>
-                Limited Time Promo
-              </span>
-              <h2 className="promo-title">Take 20% Off Your Curated Order</h2>
+            <div className="promo-banner-content">
+              <div className="promo-badge">
+                <Tag size={15} /> Limited Time Offer
+              </div>
+              <h2 className="promo-title">Up to 40% Off Everyday Essentials</h2>
               <p className="promo-desc">
-                Elevate your sanctuary with our seasonal catalog. Enter promo code at checkout or copy below to apply simulated savings.
+                Upgrade your gear, wardrobe, and home with hand-selected deals at unbeatable prices.
               </p>
-              <div style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
-                <div className="promo-code-box">AURA20</div>
-                <button
-                  type="button"
-                  onClick={handleCopyCode}
-                  className="btn btn-secondary btn-sm"
-                  style={{ background: '#fff', color: '#0f172a' }}
-                >
-                  {copiedCode ? <Check size={16} color="#059669" /> : <Copy size={16} />}
-                  <span>{copiedCode ? 'Code Copied' : 'Copy Code'}</span>
-                </button>
-              </div>
+              <Link to="/shop" className="btn btn-primary btn-md">
+                Explore Deals
+              </Link>
             </div>
-
-            <div style={{ textAlign: 'center' }}>
-              <div style={{ background: 'rgba(255, 255, 255, 0.12)', backdropFilter: 'blur(8px)', borderRadius: 'var(--radius-lg)', padding: '28px', border: '1px solid rgba(255,255,255,0.2)' }}>
-                <Flame size={36} color="#fbbf24" style={{ margin: '0 auto 12px' }} />
-                <h4 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '6px' }}>Autumn Exclusives</h4>
-                <p style={{ fontSize: '0.875rem', color: '#e2e8f0', marginBottom: '16px' }}>Complimentary shipping included on all eligible baskets.</p>
-                <Link to="/products" className="btn btn-primary btn-sm" style={{ width: '100%' }}>
-                  Claim Offer Now
-                </Link>
-              </div>
+            <div className="promo-banner-media">
+              <img
+                src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=700&auto=format&fit=crop&q=80"
+                alt="Special Deals and Promotions"
+                className="promo-image"
+              />
             </div>
           </div>
         </div>
       </section>
 
-      {/* 5. Trending / New Arrivals Section */}
-      {trendingProducts.length > 0 && (
-        <section className="section-padding" style={{ background: 'var(--bg-surface)' }}>
+      {/* 5. RECENTLY VIEWED PRODUCTS (If present in LocalStorage) */}
+      {recentlyViewed.length > 0 && (
+        <section className="recently-viewed-section">
           <div className="container">
             <div className="section-header">
               <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <TrendingUp size={18} color="var(--color-accent)" />
-                  <span className="badge badge-accent">Trending Now</span>
-                </div>
-                <h2 className="section-title">New Arrivals & Hot Picks</h2>
-                <p className="section-subtitle">Fresh additions newly stocked in our global distribution center.</p>
+                <h2 className="section-title">Recently Viewed</h2>
+                <p className="section-subtitle">Jump straight back to items you looked at earlier</p>
               </div>
-              <Link to="/products" className="btn btn-secondary btn-sm">
-                <span>View All</span>
-                <ArrowRight size={14} />
-              </Link>
             </div>
-
-            <ProductGrid products={trendingProducts} />
+            <div className="recently-viewed-grid">
+              {recentlyViewed.slice(0, 4).map((p) => (
+                <ProductCard key={p.id} product={p} />
+              ))}
+            </div>
           </div>
         </section>
       )}

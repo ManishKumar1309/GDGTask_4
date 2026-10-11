@@ -9,11 +9,11 @@ export default function OrderCard({ order }) {
   return (
     <div
       style={{
-        background: 'var(--bg-surface)',
-        border: '1px solid var(--border-subtle)',
+        background: 'var(--bg-card)',
+        border: '1px solid var(--color-border)',
         borderRadius: 'var(--radius-md)',
         padding: '24px',
-        boxShadow: 'var(--shadow-sm)',
+        boxShadow: 'var(--shadow-xs)',
         display: 'flex',
         flexDirection: 'column',
         gap: '16px',
@@ -28,39 +28,27 @@ export default function OrderCard({ order }) {
           alignItems: 'flex-start',
           flexWrap: 'wrap',
           gap: '12px',
-          borderBottom: '1px solid var(--border-light)',
+          borderBottom: '1px solid var(--color-border)',
           paddingBottom: '16px',
         }}
       >
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
-            <Package size={18} color="var(--color-accent)" />
-            <span style={{ fontWeight: 800, fontSize: '1.05rem', letterSpacing: '0.02em' }}>
+            <Package size={18} color="var(--color-primary)" />
+            <span style={{ fontWeight: 800, fontSize: '1.05rem', color: 'var(--color-text)' }}>
               {order.id}
             </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--text-muted)', fontSize: '0.85rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', color: 'var(--color-text-secondary)', fontSize: '0.85rem' }}>
             <Calendar size={14} />
             <span>{formatDate(order.date)}</span>
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <span
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.8rem',
-              fontWeight: 700,
-              backgroundColor: '#ecfdf5',
-              color: '#065f46',
-            }}
-          >
+          <span className="badge badge-stock">
             <CheckCircle2 size={14} />
-            {order.status || 'Order Placed'}
+            {order.status || 'Order Confirmed'}
           </span>
         </div>
       </div>
@@ -75,8 +63,8 @@ export default function OrderCard({ order }) {
                 width: '56px',
                 height: '56px',
                 borderRadius: 'var(--radius-sm)',
-                border: '1px solid var(--border-subtle)',
-                backgroundColor: '#fafbfc',
+                border: '1px solid var(--color-border)',
+                backgroundColor: 'var(--bg-secondary)',
                 overflow: 'hidden',
                 position: 'relative',
               }}
@@ -113,8 +101,8 @@ export default function OrderCard({ order }) {
                 width: '56px',
                 height: '56px',
                 borderRadius: 'var(--radius-sm)',
-                backgroundColor: 'var(--bg-subtle)',
-                color: 'var(--text-secondary)',
+                backgroundColor: 'var(--bg-secondary)',
+                color: 'var(--color-text-secondary)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -128,10 +116,10 @@ export default function OrderCard({ order }) {
         </div>
 
         <div>
-          <div style={{ fontSize: '0.8rem', color: 'var(--text-muted)', textAlign: 'right' }}>
+          <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', textAlign: 'right' }}>
             {order.totalQuantity || (order.items || []).reduce((acc, i) => acc + i.quantity, 0)} items
           </div>
-          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--text-main)', textAlign: 'right' }}>
+          <div style={{ fontSize: '1.25rem', fontWeight: 800, color: 'var(--color-text)', textAlign: 'right' }}>
             {formatPrice(order.totalAmount)}
           </div>
         </div>

@@ -19,14 +19,16 @@ export const AuthProvider = ({ children }) => {
     }
   }, [user]);
 
-  const login = (credentials) => {
-    const { email, name } = credentials;
-    const displayName = name || (email ? email.split('@')[0] : 'Shopify Member');
+  const login = ({ email, password, name }) => {
+    const displayName = name || (email ? email.split('@')[0] : 'Shopora Member');
+    const cleanName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+    
+    // Store only safe profile data - NO plain-text passwords
     const newUser = {
-      id: 'USR-' + Math.random().toString(36).substring(2, 9).toUpperCase(),
+      id: 'USR-' + Math.floor(100000 + Math.random() * 900000),
       email: email.trim(),
-      name: displayName.charAt(0).toUpperCase() + displayName.slice(1),
-      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(displayName)}&backgroundColor=0f172a,059669,2563eb`,
+      name: cleanName,
+      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(cleanName)}&backgroundColor=0f172a,ff9900`,
       joinedAt: new Date().toISOString(),
     };
 
@@ -35,11 +37,29 @@ export const AuthProvider = ({ children }) => {
     return newUser;
   };
 
+  const signup = ({ name, email, password }) => {
+    const cleanName = (name || email.split('@')[0]).trim();
+    const formattedName = cleanName.charAt(0).toUpperCase() + cleanName.slice(1);
+
+    // Store only safe profile data - NO plain-text passwords
+    const newUser = {
+      id: 'USR-' + Math.floor(100000 + Math.random() * 900000),
+      email: email.trim(),
+      name: formattedName,
+      avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(formattedName)}&backgroundColor=0f172a,ff9900`,
+      joinedAt: new Date().toISOString(),
+    };
+
+    setUser(newUser);
+    addToast(`Account created! Welcome to Shopora, ${newUser.name}!`, 'success');
+    return newUser;
+  };
+
   const logout = () => {
     const prevName = user?.name || 'User';
     setUser(null);
     removeStorageItem(STORAGE_KEYS.AUTH_USER);
-    addToast(`Goodbye, ${prevName}. You have been logged out.`, 'info');
+    addToast(`Logged out successfully. Have a great day, ${prevName}!`, 'info');
   };
 
   const updateProfile = (updates) => {
@@ -57,6 +77,7 @@ export const AuthProvider = ({ children }) => {
         user,
         isAuthenticated: Boolean(user),
         login,
+        signup,
         logout,
         updateProfile,
       }}

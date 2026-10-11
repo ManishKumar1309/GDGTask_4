@@ -1,5 +1,5 @@
 /**
- * Validation utilities for Checkout and Login forms.
+ * Validation utilities for Checkout, Login, and Signup forms.
  */
 
 export const isValidEmail = (email) => {
@@ -10,15 +10,16 @@ export const isValidEmail = (email) => {
 
 export const isValidPhone = (phone) => {
   if (!phone || typeof phone !== 'string') return false;
-  // Allows optional +, digits, spaces, hyphens, min 7 digits
   const digits = phone.replace(/\D/g, '');
-  return digits.length >= 7 && digits.length <= 15;
+  // Indian phone numbers are 10 digits (optionally with +91)
+  return digits.length === 10 || (digits.length === 12 && digits.startsWith('91'));
 };
 
 export const isValidPostalCode = (postal) => {
   if (!postal || typeof postal !== 'string') return false;
-  const trimmed = postal.trim();
-  return trimmed.length >= 3 && trimmed.length <= 10;
+  const digits = postal.replace(/\D/g, '');
+  // Indian PIN codes are 6 digits
+  return digits.length === 6;
 };
 
 /**
@@ -31,7 +32,7 @@ export const validateCheckoutForm = (values) => {
 
   // Customer Info
   if (!values.fullName || values.fullName.trim().length < 2) {
-    errors.fullName = 'Full name is required (at least 2 characters)';
+    errors.fullName = 'Please enter your full name (minimum 2 characters)';
   }
 
   if (!values.email || !isValidEmail(values.email)) {
@@ -39,12 +40,12 @@ export const validateCheckoutForm = (values) => {
   }
 
   if (!values.phone || !isValidPhone(values.phone)) {
-    errors.phone = 'Please enter a valid phone number (at least 7 digits)';
+    errors.phone = 'Please enter a valid 10-digit mobile number';
   }
 
   // Shipping Address
   if (!values.address || values.address.trim().length < 5) {
-    errors.address = 'Street address is required (at least 5 characters)';
+    errors.address = 'House / flat number and street address are required';
   }
 
   if (!values.city || values.city.trim().length < 2) {
@@ -52,15 +53,11 @@ export const validateCheckoutForm = (values) => {
   }
 
   if (!values.state || values.state.trim().length < 2) {
-    errors.state = 'State / Province is required';
+    errors.state = 'State is required';
   }
 
   if (!values.postalCode || !isValidPostalCode(values.postalCode)) {
-    errors.postalCode = 'Valid postal / ZIP code is required';
-  }
-
-  if (!values.country || values.country.trim().length < 2) {
-    errors.country = 'Country is required';
+    errors.postalCode = 'Please enter a valid 6-digit PIN code';
   }
 
   return errors;
@@ -73,6 +70,29 @@ export const validateCheckoutForm = (values) => {
  */
 export const validateLoginForm = (values) => {
   const errors = {};
+
+  if (!values.email || !isValidEmail(values.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+
+  if (!values.password || values.password.length < 6) {
+    errors.password = 'Password must be at least 6 characters';
+  }
+
+  return errors;
+};
+
+/**
+ * Validates signup form data
+ * @param {object} values 
+ * @returns {object} errors map
+ */
+export const validateSignupForm = (values) => {
+  const errors = {};
+
+  if (!values.name || values.name.trim().length < 2) {
+    errors.name = 'Full name is required (minimum 2 characters)';
+  }
 
   if (!values.email || !isValidEmail(values.email)) {
     errors.email = 'Please enter a valid email address';

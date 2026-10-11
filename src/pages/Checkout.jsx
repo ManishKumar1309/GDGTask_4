@@ -4,17 +4,13 @@ import { useCart } from '../context/CartContext';
 import { useOrders } from '../context/OrderContext';
 import { useAuth } from '../context/AuthContext';
 import { validateCheckoutForm } from '../utils/validation';
-import { formatPrice, formatDate } from '../utils/formatters';
+import { formatPrice } from '../utils/formatters';
 import {
-  CheckCircle2,
-  ShieldCheck,
-  Truck,
-  ArrowRight,
-  Package,
-  ShoppingBag,
-  User,
-  MapPin,
   Lock,
+  ShieldCheck,
+  ShoppingBag,
+  CreditCard,
+  Banknote,
 } from 'lucide-react';
 import './Checkout.css';
 
@@ -24,7 +20,7 @@ export default function Checkout() {
   const { placeOrder } = useOrders();
   const { user } = useAuth();
 
-  // Form Fields State
+  // All Hooks MUST be called unconditionally at the top level
   const [formData, setFormData] = useState({
     fullName: user?.name || '',
     email: user?.email || '',
@@ -33,114 +29,25 @@ export default function Checkout() {
     city: '',
     state: '',
     postalCode: '',
-    country: 'United States',
+    country: 'India',
   });
 
+  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery (COD)');
   const [touched, setTouched] = useState({});
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const [placedOrder, setPlacedOrder] = useState(null);
 
-  // If order was successfully placed in this session, show order confirmation screen
-  if (placedOrder) {
-    return (
-      <div className="container" style={{ padding: '40px 20px 80px' }}>
-        <div className="order-success-card">
-          <div className="success-badge-icon">
-            <CheckCircle2 size={40} />
-          </div>
-
-          <span className="badge badge-accent" style={{ marginBottom: '8px' }}>
-            Receipt Confirmed
-          </span>
-
-          <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '8px' }}>
-            Thank You For Your Order!
-          </h1>
-
-          <p style={{ color: 'var(--text-secondary)', fontSize: '1rem', maxWidth: '480px', margin: '0 auto 16px' }}>
-            Your simulated order has been placed successfully and logged in your local order history.
-          </p>
-
-          <div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)' }}>Order Reference Number</span>
-            <div className="order-id-display">{placedOrder.id}</div>
-          </div>
-
-          {/* Placed Order Summary Breakdown */}
-          <div
-            style={{
-              textAlign: 'left',
-              background: 'var(--bg-body)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: 'var(--radius-md)',
-              padding: '24px',
-              margin: '24px 0 32px',
-            }}
-          >
-            <h3 style={{ fontSize: '1.05rem', fontWeight: 800, marginBottom: '16px', borderBottom: '1px solid var(--border-subtle)', paddingBottom: '8px' }}>
-              Order Breakdown
-            </h3>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px', fontSize: '0.9rem' }}>
-              <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Customer Info:</span>
-                <strong>{placedOrder.customer.fullName}</strong>
-                <div>{placedOrder.customer.email}</div>
-                <div>{placedOrder.customer.phone}</div>
-              </div>
-
-              <div>
-                <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block' }}>Shipping Destination:</span>
-                <div>{placedOrder.shippingAddress.address}</div>
-                <div>
-                  {placedOrder.shippingAddress.city}, {placedOrder.shippingAddress.state} {placedOrder.shippingAddress.postalCode}
-                </div>
-                <div>{placedOrder.shippingAddress.country}</div>
-              </div>
-            </div>
-
-            <div style={{ borderTop: '1px solid var(--border-subtle)', paddingTop: '16px' }}>
-              <span style={{ color: 'var(--text-muted)', fontSize: '0.8rem', display: 'block', marginBottom: '8px' }}>Purchased Items:</span>
-              {placedOrder.items.map((item, idx) => (
-                <div key={idx} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.875rem', marginBottom: '6px' }}>
-                  <span>{item.title} × {item.quantity}</span>
-                  <span style={{ fontWeight: 600 }}>{formatPrice(item.subtotal)}</span>
-                </div>
-              ))}
-
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.05rem', fontWeight: 800, marginTop: '12px', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px' }}>
-                <span>Total Amount</span>
-                <span>{formatPrice(placedOrder.totalAmount)}</span>
-              </div>
-            </div>
-          </div>
-
-          <div style={{ display: 'flex', gap: '14px', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link to="/orders" className="btn btn-primary btn-lg">
-              <Package size={18} /> View All Orders
-            </Link>
-            <Link to="/products" className="btn btn-secondary btn-lg">
-              <ShoppingBag size={18} /> Continue Shopping
-            </Link>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  // If cart is empty, prompt user to add items
+  // If cart is empty, show empty state AFTER all hooks
   if (!cart || cart.length === 0) {
     return (
-      <div className="container" style={{ padding: '60px 20px', textAlign: 'center' }}>
-        <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '12px' }}>
-          Your bag is currently empty
-        </h2>
-        <p style={{ color: 'var(--text-secondary)', marginBottom: '24px' }}>
-          Add products to your cart before proceeding to checkout.
+      <div className="container" style={{ padding: '80px 20px', textAlign: 'center' }}>
+        <ShoppingBag size={56} color="var(--color-text-secondary)" style={{ margin: '0 auto 16px' }} />
+        <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '8px' }}>Your Cart is Empty</h2>
+        <p style={{ color: 'var(--color-text-secondary)', marginBottom: '24px' }}>
+          Please add items to your cart before proceeding to checkout.
         </p>
-        <Link to="/products" className="btn btn-primary btn-lg">
-          Browse Products
+        <Link to="/shop" className="btn btn-primary btn-md">
+          Explore Products
         </Link>
       </div>
     );
@@ -165,7 +72,7 @@ export default function Checkout() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Mark all as touched
+    // Mark all fields as touched
     const allTouched = Object.keys(formData).reduce((acc, k) => ({ ...acc, [k]: true }), {});
     setTouched(allTouched);
 
@@ -173,6 +80,7 @@ export default function Checkout() {
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length > 0) {
+      window.scrollTo({ top: 120, behavior: 'smooth' });
       return;
     }
 
@@ -194,40 +102,39 @@ export default function Checkout() {
           country: formData.country,
         },
         items: cart,
+        paymentMethod,
         subtotal,
         shippingCost,
         grandTotal,
       });
 
       setSubmitting(false);
-      setPlacedOrder(newOrder);
+      navigate(`/order-confirmation/${newOrder.id}`);
     }, 600);
   };
 
-  const isFormValid = Object.keys(validateCheckoutForm(formData)).length === 0;
-
   return (
-    <div className="container checkout-wrapper">
+    <div className="container checkout-container">
       <div style={{ marginBottom: '32px' }}>
-        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--text-main)', marginBottom: '6px' }}>
-          Checkout & Express Shipping
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 800, color: 'var(--color-text)', marginBottom: '6px' }}>
+          Checkout & Delivery
         </h1>
-        <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem' }}>
-          Complete your customer and delivery details below to finalize your simulated order.
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem' }}>
+          Please complete your delivery address and choose a payment method.
         </p>
       </div>
 
       <form onSubmit={handleSubmit}>
         <div className="checkout-grid">
-          {/* Left Column: Form Fields */}
-          <div>
-            {/* 1. Customer Information */}
-            <div className="checkout-section-box">
-              <div className="checkout-section-header">
-                <User size={20} color="var(--color-accent)" />
-                <h2 className="checkout-section-title">1. Customer Information</h2>
-              </div>
+          {/* Left Column: Customer Form & Payment Options */}
+          <div className="checkout-form-column">
+            {/* 1. Customer & Shipping Details */}
+            <div className="checkout-box">
+              <h2 className="checkout-box-title">
+                1. Delivery Information
+              </h2>
 
+              {/* Full Name */}
               <div className="form-group">
                 <label className="form-label" htmlFor="fullName">
                   Full Name <span className="required">*</span>
@@ -235,7 +142,7 @@ export default function Checkout() {
                 <input
                   id="fullName"
                   type="text"
-                  placeholder="e.g. Eleanor Vance"
+                  placeholder="e.g. Rahul Sharma"
                   value={formData.fullName}
                   onChange={(e) => handleChange('fullName', e.target.value)}
                   onBlur={() => handleBlur('fullName')}
@@ -246,7 +153,8 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="checkout-form-grid-2">
+              {/* Email & Mobile Number Grid */}
+              <div className="form-row-2">
                 <div className="form-group">
                   <label className="form-label" htmlFor="email">
                     Email Address <span className="required">*</span>
@@ -267,12 +175,12 @@ export default function Checkout() {
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="phone">
-                    Phone Number <span className="required">*</span>
+                    Mobile Number <span className="required">*</span>
                   </label>
                   <input
                     id="phone"
                     type="tel"
-                    placeholder="+1 (555) 019-2834"
+                    placeholder="10-digit mobile number"
                     value={formData.phone}
                     onChange={(e) => handleChange('phone', e.target.value)}
                     onBlur={() => handleBlur('phone')}
@@ -283,23 +191,16 @@ export default function Checkout() {
                   )}
                 </div>
               </div>
-            </div>
 
-            {/* 2. Shipping Address */}
-            <div className="checkout-section-box">
-              <div className="checkout-section-header">
-                <MapPin size={20} color="var(--color-accent)" />
-                <h2 className="checkout-section-title">2. Shipping Address</h2>
-              </div>
-
+              {/* House and Street Address */}
               <div className="form-group">
                 <label className="form-label" htmlFor="address">
-                  Street Address <span className="required">*</span>
+                  House / Flat No. & Street Address <span className="required">*</span>
                 </label>
                 <input
                   id="address"
                   type="text"
-                  placeholder="1248 Lexington Avenue, Suite 400"
+                  placeholder="Flat 402, Sunshine Apartments, MG Road"
                   value={formData.address}
                   onChange={(e) => handleChange('address', e.target.value)}
                   onBlur={() => handleBlur('address')}
@@ -310,7 +211,8 @@ export default function Checkout() {
                 )}
               </div>
 
-              <div className="checkout-form-grid-3">
+              {/* City, State, PIN code */}
+              <div className="form-row-3">
                 <div className="form-group">
                   <label className="form-label" htmlFor="city">
                     City <span className="required">*</span>
@@ -318,7 +220,7 @@ export default function Checkout() {
                   <input
                     id="city"
                     type="text"
-                    placeholder="New York"
+                    placeholder="e.g. Bengaluru"
                     value={formData.city}
                     onChange={(e) => handleChange('city', e.target.value)}
                     onBlur={() => handleBlur('city')}
@@ -331,12 +233,12 @@ export default function Checkout() {
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="state">
-                    State / Province <span className="required">*</span>
+                    State <span className="required">*</span>
                   </label>
                   <input
                     id="state"
                     type="text"
-                    placeholder="NY"
+                    placeholder="e.g. Karnataka"
                     value={formData.state}
                     onChange={(e) => handleChange('state', e.target.value)}
                     onBlur={() => handleBlur('state')}
@@ -349,12 +251,12 @@ export default function Checkout() {
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="postalCode">
-                    Postal / ZIP Code <span className="required">*</span>
+                    PIN Code <span className="required">*</span>
                   </label>
                   <input
                     id="postalCode"
                     type="text"
-                    placeholder="10028"
+                    placeholder="6 digits (e.g. 560001)"
                     value={formData.postalCode}
                     onChange={(e) => handleChange('postalCode', e.target.value)}
                     onBlur={() => handleBlur('postalCode')}
@@ -365,113 +267,143 @@ export default function Checkout() {
                   )}
                 </div>
               </div>
-
-              <div className="form-group">
-                <label className="form-label" htmlFor="country">
-                  Country <span className="required">*</span>
-                </label>
-                <select
-                  id="country"
-                  value={formData.country}
-                  onChange={(e) => handleChange('country', e.target.value)}
-                  className="form-select"
-                >
-                  <option value="United States">United States</option>
-                  <option value="Canada">Canada</option>
-                  <option value="United Kingdom">United Kingdom</option>
-                  <option value="Australia">Australia</option>
-                  <option value="Germany">Germany</option>
-                  <option value="France">France</option>
-                  <option value="India">India</option>
-                  <option value="Japan">Japan</option>
-                </select>
-              </div>
             </div>
 
-            {/* 3. Simulated Payment Information Note */}
-            <div className="checkout-section-box">
-              <div className="checkout-section-header">
-                <Lock size={20} color="var(--color-accent)" />
-                <h2 className="checkout-section-title">3. Payment Method</h2>
+            {/* 2. Simulated Payment Options */}
+            <div className="checkout-box">
+              <h2 className="checkout-box-title">
+                2. Payment Method
+              </h2>
+
+              <div className="payment-options-group">
+                {/* Cash on Delivery option */}
+                <label className={`payment-option-card ${paymentMethod === 'Cash on Delivery (COD)' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Cash on Delivery (COD)"
+                    checked={paymentMethod === 'Cash on Delivery (COD)'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="payment-radio"
+                  />
+                  <div className="payment-icon-box">
+                    <Banknote size={22} color="var(--color-primary)" />
+                  </div>
+                  <div>
+                    <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                      Cash on Delivery (COD)
+                    </strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+                      Pay in cash or UPI when your parcel arrives at your doorstep
+                    </span>
+                  </div>
+                </label>
+
+                {/* Demo Online Payment option */}
+                <label className={`payment-option-card ${paymentMethod === 'Demo Online Payment (UPI / Card)' ? 'selected' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="Demo Online Payment (UPI / Card)"
+                    checked={paymentMethod === 'Demo Online Payment (UPI / Card)'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="payment-radio"
+                  />
+                  <div className="payment-icon-box">
+                    <CreditCard size={22} color="var(--color-primary)" />
+                  </div>
+                  <div>
+                    <strong style={{ display: 'block', fontSize: '0.95rem', color: 'var(--color-text)' }}>
+                      Demo Online Payment (UPI / Card / NetBanking)
+                    </strong>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-secondary)' }}>
+                      Simulated instant online transaction (no real card details required)
+                    </span>
+                  </div>
+                </label>
               </div>
-              <div style={{ background: '#ecfdf5', border: '1px solid #a7f3d0', borderRadius: 'var(--radius-sm)', padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <ShieldCheck size={28} color="#059669" />
-                <div style={{ fontSize: '0.875rem', color: '#065f46', lineHeight: 1.5 }}>
-                  <strong>Simulated Sandbox Environment:</strong> No real credit card or payment credentials are required. Clicking "Place Order" below will immediately generate an official order receipt and save it to your local storage.
-                </div>
+
+              <div className="sandbox-info-banner">
+                <ShieldCheck size={20} color="#10B981" />
+                <span>
+                  <strong>Demo Mode:</strong> No real payment is deducted. Clicking "Place Order" will generate an official order ID and save the order in LocalStorage.
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Right Column: Order Summary & Place Button */}
-          <aside className="checkout-summary-box">
-            <h3 style={{ fontSize: '1.25rem', fontWeight: 800, marginBottom: '20px', borderBottom: '1px solid var(--border-light)', paddingBottom: '12px' }}>
-              Order Summary ({cart.length} items)
-            </h3>
+          {/* Right Column: Order Summary & Place Order Button */}
+          <div className="checkout-summary-column">
+            <div className="checkout-summary-card">
+              <h2 className="summary-card-title">Order Summary ({cart.length} items)</h2>
 
-            {/* Products preview */}
-            <div style={{ maxHeight: '280px', overflowY: 'auto', marginBottom: '20px', paddingRight: '4px' }}>
-              {cart.map((item) => (
-                <div key={item.id} className="checkout-item-preview">
-                  <img
-                    src={item.thumbnail}
-                    alt={item.title}
-                    className="checkout-item-img"
-                  />
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontSize: '0.875rem', fontWeight: 700, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                      {item.title}
+              {/* Products preview */}
+              <div className="checkout-items-preview-list">
+                {cart.map((item) => (
+                  <div key={item.id} className="checkout-item-row">
+                    <img
+                      src={item.thumbnail}
+                      alt={item.title}
+                      className="checkout-item-thumb"
+                    />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div className="checkout-item-name" title={item.title}>
+                        {item.title}
+                      </div>
+                      <div className="checkout-item-qty">
+                        Qty: {item.quantity} × {formatPrice(item.price)}
+                      </div>
                     </div>
-                    <div style={{ fontSize: '0.775rem', color: 'var(--text-muted)' }}>
-                      Qty: {item.quantity} × {formatPrice(item.price)}
+                    <div className="checkout-item-price">
+                      {formatPrice(item.price * item.quantity)}
                     </div>
                   </div>
-                  <div style={{ fontSize: '0.9rem', fontWeight: 800 }}>
-                    {formatPrice(item.price * item.quantity)}
-                  </div>
+                ))}
+              </div>
+
+              {/* Price Calculations */}
+              <div className="checkout-totals-box">
+                <div className="summary-row">
+                  <span>Subtotal</span>
+                  <span>{formatPrice(subtotal)}</span>
                 </div>
-              ))}
-            </div>
 
-            {/* Amounts */}
-            <div style={{ borderTop: '1px solid var(--border-light)', paddingTop: '16px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                <span>Subtotal</span>
-                <span>{formatPrice(subtotal)}</span>
+                <div className="summary-row">
+                  <span>Shipping Charges</span>
+                  <span>
+                    {shippingCost === 0 ? (
+                      <strong style={{ color: '#10B981' }}>FREE</strong>
+                    ) : (
+                      formatPrice(shippingCost)
+                    )}
+                  </span>
+                </div>
+
+                <div className="summary-divider" />
+
+                <div className="summary-total-row">
+                  <span>Final Payable Amount</span>
+                  <span className="summary-final-price">{formatPrice(grandTotal)}</span>
+                </div>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px', fontSize: '0.9rem', color: 'var(--text-secondary)' }}>
-                <span>Express Shipping</span>
-                <span style={{ color: shippingCost === 0 ? 'var(--color-accent)' : 'inherit', fontWeight: 600 }}>
-                  {shippingCost === 0 ? 'FREE' : formatPrice(shippingCost)}
-                </span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1.2rem', fontWeight: 800, color: 'var(--text-main)', borderTop: '1px solid var(--border-subtle)', paddingTop: '14px', marginBottom: '24px' }}>
-                <span>Total Due</span>
-                <span>{formatPrice(grandTotal)}</span>
+
+              {/* Place Order Button */}
+              <button
+                type="submit"
+                disabled={submitting}
+                className="btn btn-primary btn-lg"
+                style={{ width: '100%', marginTop: '24px', gap: '8px' }}
+              >
+                <Lock size={18} />
+                <span>{submitting ? 'Placing Order...' : 'Place Order'}</span>
+              </button>
+
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '16px' }}>
+                <ShieldCheck size={15} color="#10B981" />
+                <span>Simulated Order • Instant Local Confirmation</span>
               </div>
             </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={submitting || !isFormValid}
-              className="btn btn-primary btn-lg"
-              style={{ width: '100%', gap: '8px' }}
-            >
-              <Lock size={18} />
-              <span>{submitting ? 'Confirming Order...' : 'Place Order'}</span>
-            </button>
-
-            {!isFormValid && (
-              <p style={{ color: 'var(--color-danger)', fontSize: '0.8rem', marginTop: '10px', textAlign: 'center' }}>
-                Please fill in all required delivery details above.
-              </p>
-            )}
-
-            <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.775rem', color: 'var(--text-muted)' }}>
-              🔒 256-Bit Encrypted Simulated Transaction
-            </div>
-          </aside>
+          </div>
         </div>
       </form>
     </div>
