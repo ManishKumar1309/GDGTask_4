@@ -45,7 +45,7 @@ export default function Footer() {
                 <ShoppingBag size={20} />
               </div>
               <span className="brand-name">
-                Shopora<span className="brand-dot">.</span>
+                Shopora
               </span>
             </Link>
             <p className="footer-description">

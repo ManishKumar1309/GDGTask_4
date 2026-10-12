@@ -88,5 +88,11 @@ export async function getProductById(id) {
  */
 export async function getCategories() {
   await new Promise((resolve) => setTimeout(resolve, 30));
-  return CATEGORIES_LIST;
+  return CATEGORIES_LIST.map((cat) => {
+    const productCount = FALLBACK_PRODUCTS.filter((p) => p.category.toLowerCase() === cat.slug.toLowerCase()).length;
+    return {
+      ...cat,
+      count: `${productCount} Products`,
+    };
+  });
 }

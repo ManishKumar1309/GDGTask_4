@@ -66,7 +66,7 @@ export default function Navbar() {
                 <ShoppingBag size={22} strokeWidth={2.4} />
               </div>
               <span className="brand-name">
-                Shopora<span className="brand-dot">.</span>
+                Shopora
               </span>
             </Link>
 
@@ -203,7 +203,7 @@ export default function Navbar() {
                   <ShoppingBag size={20} strokeWidth={2.4} />
                 </div>
                 <span className="brand-name">
-                  Shopora<span className="brand-dot">.</span>
+                  Shopora
                 </span>
               </Link>
               <button

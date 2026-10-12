@@ -98,9 +98,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.7,
     stock: 55,
     brand: "VoltSpeed",
-    thumbnail: "https://images.unsplash.com/photo-1609592424360-8488e001c3bf?w=800&auto=format&fit=crop&q=80",
+    thumbnail: "/images/products/power-bank.jpg",
     images: [
-      "https://images.unsplash.com/photo-1609592424360-8488e001c3bf?w=800&auto=format&fit=crop&q=80"
+      "/images/products/power-bank.jpg"
     ],
     specs: {
       "Capacity": "20,000 mAh Lithium Polymer",
@@ -435,8 +435,7 @@ export const FALLBACK_PRODUCTS = [
     brand: "Botanica Lab",
     thumbnail: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
-      "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Key Actives": "15% Vitamin C, 1% Hyaluronic Acid, Ferulic Acid",
@@ -506,9 +505,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.6,
     stock: 60,
     brand: "Botanica Lab",
-    thumbnail: "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80",
+    thumbnail: "/images/products/argan-oil.jpg",
     images: [
-      "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80"
+      "/images/products/argan-oil.jpg"
     ],
     specs: {
       "Purity": "100% Pure Virgin Cold-Pressed",
@@ -618,14 +617,608 @@ export const FALLBACK_PRODUCTS = [
     reviews: [
       { rating: 5, comment: "Do not roll or pinch during squats. Perfect travel workout kit.", reviewerName: "Rhea Chawla", date: "2026-02-22" }
     ]
+  },
+
+  // --- ADDITIONAL ELECTRONICS ---
+  {
+    id: 25,
+    title: "SonicBuds Pro Active Noise Cancelling TWS Earbuds",
+    description: "Compact true wireless earbuds with hybrid 35dB active noise cancellation, 11mm titanium dynamic drivers, transparency ambient mode, and 32 hours total playtime.",
+    category: "electronics",
+    price: 2299,
+    discountPercentage: 30,
+    rating: 4.8,
+    stock: 65,
+    brand: "AuraWave",
+    thumbnail: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Drivers": "11mm Custom Titanium Diaphragm",
+      "Noise Cancellation": "Up to 35dB Hybrid ANC",
+      "Battery": "32 Hours with Qi Wireless Charging Case",
+      "Water Resistance": "IPX5 Sweat & Splash Proof",
+      "Connectivity": "Bluetooth 5.3 with Dual Device Pairing"
+    },
+    reviews: [
+      { rating: 5, comment: "Noise cancellation punches far above its price tag. Bass is tight and impactful without overpowering vocals.", reviewerName: "Kunal Jain", date: "2026-03-02" }
+    ]
+  },
+  {
+    id: 26,
+    title: "GlideTouch Ergonomic Wireless Multi-Device Mouse",
+    description: "Ergonomic vertical contour mouse engineered to reduce wrist strain, featuring dual Bluetooth + 2.4GHz connectivity, whisper-quiet micro switches, and 4000 DPI optical sensor.",
+    category: "electronics",
+    price: 1499,
+    discountPercentage: 20,
+    rating: 4.7,
+    stock: 48,
+    brand: "LogiTechne",
+    thumbnail: "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Sensor": "High-Precision 4000 DPI Optical",
+      "Connectivity": "Bluetooth 5.1 & 2.4GHz USB Receiver",
+      "Battery": "Rechargeable 500mAh Lithium (Up to 70 days)",
+      "Ergonomics": "Natural 57-degree handshake grip angle",
+      "Warranty": "1 Year Replacement Warranty"
+    },
+    reviews: [
+      { rating: 5, comment: "Completely relieved my wrist fatigue from long coding sessions. Smooth gliding on all desk mats.", reviewerName: "Siddharth Roy", date: "2026-02-18" }
+    ]
+  },
+  {
+    id: 27,
+    title: "UltraView 4K UHD 60Hz USB-C Portable Monitor 15.6\"",
+    description: "Ultra-slim 15.6-inch 4K IPS secondary display with 100% sRGB color gamut, dual USB-C full-function ports, mini-HDMI, and built-in stereo speakers for mobile productivity.",
+    category: "electronics",
+    price: 8999,
+    discountPercentage: 15,
+    rating: 4.9,
+    stock: 22,
+    brand: "ViewTech",
+    thumbnail: "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Panel": "15.6 inch IPS Anti-Glare 4K UHD (3840 x 2160)",
+      "Color Gamut": "100% sRGB, 400 nits Peak Brightness",
+      "Ports": "2x USB Type-C (Power & Display), 1x Mini HDMI, 3.5mm Audio",
+      "Weight": "680 grams ultra-portable chassis",
+      "Included": "Magnetic Folding Smart Stand Cover & Cables"
+    },
+    reviews: [
+      { rating: 5, comment: "Powers directly from my MacBook via one single Type-C cable. Perfect for travel and dual-monitor workflows.", reviewerName: "Varun Nair", date: "2026-03-08" }
+    ]
+  },
+  {
+    id: 28,
+    title: "LumiCore RGB Mechanical Gaming Keyboard 75%",
+    description: "Compact 82-key mechanical keyboard with hot-swappable linear red switches, sound-dampening silicone gasket mount, per-key RGB backlighting, and durable double-shot PBT keycaps.",
+    category: "electronics",
+    price: 3299,
+    discountPercentage: 25,
+    rating: 4.8,
+    stock: 34,
+    brand: "KeyForge",
+    thumbnail: "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1587829741301-dc798b83add3?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Layout": "75% Compact Form Factor (82 Keys + Volume Knob)",
+      "Switches": "Hot-Swappable Factory-Lubed Linear Reds",
+      "Mount": "Multi-Layer Silicone Gasket Mount",
+      "Keycaps": "Fade-Resistant Double-Shot PBT Cherry Profile",
+      "Cable": "Detachable Braided Type-C to Type-A"
+    },
+    reviews: [
+      { rating: 5, comment: "The acoustic sound profile is so creamy and satisfying right out of the box. Zero metallic rattle.", reviewerName: "Gaurav Sen", date: "2026-02-24" }
+    ]
+  },
+
+  // --- ADDITIONAL FASHION ---
+  {
+    id: 29,
+    title: "Merino Wool Blend Classic Cable-Knit Sweater",
+    description: "Luxurious cold-weather crewneck sweater woven from an ultra-soft merino wool and cashmere blend with heritage cable-knit patterns and ribbed cuffs.",
+    category: "fashion",
+    price: 2199,
+    discountPercentage: 25,
+    rating: 4.8,
+    stock: 42,
+    brand: "UrbanThread",
+    thumbnail: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Material": "70% Australian Merino Wool, 30% Cashmere-Touch Acrylic",
+      "Fit": "Tailored Regular Fit",
+      "Collar": "Double-Layer Ribbed Crewneck",
+      "Care": "Gentle hand wash cold or wool cycle"
+    },
+    reviews: [
+      { rating: 5, comment: "Incredibly soft against bare skin without any itchiness. Keeps you snug and looks very sharp.", reviewerName: "Abhinav Kapoor", date: "2026-02-14" }
+    ]
+  },
+  {
+    id: 30,
+    title: "All-Weather Lightweight Windbreaker Bomber Jacket",
+    description: "Versatile transitional water-resistant bomber jacket with matte ripstop fabric, zippered arm utility pocket, breathable mesh interior, and windproof storm flap.",
+    category: "fashion",
+    price: 2499,
+    discountPercentage: 20,
+    rating: 4.7,
+    stock: 36,
+    brand: "Aerowear",
+    thumbnail: "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Fabric": "Hydrophobic Water-Repellent Matte Ripstop",
+      "Lining": "Sweat-Wicking Poly Mesh",
+      "Pockets": "2 Fleece-Lined Hand Pockets + 1 Internal Chest Pocket",
+      "Zippers": "YKK Reverse Coil Windproof Zips"
+    },
+    reviews: [
+      { rating: 4.5, comment: "Ideal for light winter breezes and drizzle. Fits true to size with room for a hoodie underneath.", reviewerName: "Mohit Aggarwal", date: "2026-02-28" }
+    ]
+  },
+  {
+    id: 31,
+    title: "Tailored Pleated Chino Trousers with Flex Waist",
+    description: "Modern smart-casual trousers crafted from premium stretch cotton twill with subtle single front pleats, hidden elastic waistband inserts, and tailored tapered ankle breaks.",
+    category: "fashion",
+    price: 1699,
+    discountPercentage: 30,
+    rating: 4.6,
+    stock: 55,
+    brand: "DenimCraft",
+    thumbnail: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Composition": "98% Combed Cotton, 2% Spandex Elastane",
+      "Waist": "Comfort-Flex Hidden Elastic Expander (Up to 1.5 inches)",
+      "Pockets": "Dual Side Slash Pockets + Buttoned Rear Welt Pockets",
+      "Occasion": "Office, Meetings, and Evening Dinners"
+    },
+    reviews: [
+      { rating: 5, comment: "The flex waist makes sitting at an office desk all day effortlessly comfortable.", reviewerName: "Prateek Mathur", date: "2026-03-01" }
+    ]
+  },
+  {
+    id: 32,
+    title: "Artisanal Embroidered Chanderi Silk Dupatta & Stole",
+    description: "Heritage handwoven festive Chanderi silk dupatta adorned with delicate golden zari bootis, rich scalloped borders, and handcrafted tassels.",
+    category: "fashion",
+    price: 1299,
+    discountPercentage: 15,
+    rating: 4.9,
+    stock: 30,
+    brand: "Virasat",
+    thumbnail: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Weave": "Authentic Handloom Chanderi Silk Cotton",
+      "Embellishment": "Traditional Gold Zari Thread Embroidery",
+      "Dimensions": "2.5 Meters Length x 36 Inches Width",
+      "Origin": "Handcrafted by traditional master weavers in MP"
+    },
+    reviews: [
+      { rating: 5, comment: "The gold sheen is subtle and regal. Perfectly elevates simple plain kurtas for festive wear.", reviewerName: "Divya Nambiar", date: "2026-02-19" }
+    ]
+  },
+
+  // --- ADDITIONAL HOME & LIVING ---
+  {
+    id: 33,
+    title: "Handmade Ceramic Artisan Coffee Mug Set of 2",
+    description: "Pair of rustic artisanal stoneware coffee mugs with speckled earth tone glaze, ergonomic thumb-rest handles, and lead-free food-safe finish.",
+    category: "home-living",
+    price: 799,
+    discountPercentage: 20,
+    rating: 4.9,
+    stock: 45,
+    brand: "ZenLiving",
+    thumbnail: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Set Contents": "2 Mugs (350ml each)",
+      "Material": "High-Fired Glazed Stoneware Ceramic",
+      "Care": "Microwave Safe & Dishwasher Safe",
+      "Finish": "Handcrafted Semi-Matte Speckled Glaze"
+    },
+    reviews: [
+      { rating: 5, comment: "Each mug feels uniquely handcrafted. Retains heat much longer than regular ceramic.", reviewerName: "Tanvi Saxena", date: "2026-03-04" }
+    ]
+  },
+  {
+    id: 34,
+    title: "Natural Woven Jute & Cotton Braided Floor Rug (4x6 ft)",
+    description: "Eco-friendly reversible accent area rug hand-braided from natural golden jute fibers and soft recycled cotton yarns. Adds warmth and organic texture to any living room or bedroom.",
+    category: "home-living",
+    price: 1899,
+    discountPercentage: 35,
+    rating: 4.8,
+    stock: 26,
+    brand: "NordicHue",
+    thumbnail: "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1600121848594-d8644e57abab?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Dimensions": "120 cm x 180 cm (4 x 6 Feet)",
+      "Material": "80% Pure Golden Jute, 20% Sustainable Recycled Cotton",
+      "Design": "Reversible Dual-Sided Braided Weave",
+      "Durability": "Heavy-Traffic Resilient Natural Fiber"
+    },
+    reviews: [
+      { rating: 5, comment: "Brought an instant bohemian aesthetic to our living space. Doesn't shed fiber at all.", reviewerName: "Alok Sengupta", date: "2026-02-11" }
+    ]
+  },
+  {
+    id: 35,
+    title: "Scented Soy Wax Luxury Candles Gift Box (Trio)",
+    description: "Trio of hand-poured natural soy wax aromatherapy candles infused with pure botanical essential oils: French Lavender, Smoked Amber, and White Tea Vanilla.",
+    category: "home-living",
+    price: 999,
+    discountPercentage: 25,
+    rating: 4.7,
+    stock: 60,
+    brand: "ZenLiving",
+    thumbnail: "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Pack": "Set of 3 Amber Glass Jars (120g each)",
+      "Wax": "100% Plant-Based Biodegradable Soy Wax",
+      "Burn Time": "35+ Hours per candle (105+ Hours total)",
+      "Wick": "Lead-Free Braided Cotton Wick"
+    },
+    reviews: [
+      { rating: 5, comment: "The lavender scent is calming and fills the whole room without being overpowering.", reviewerName: "Sanya Arora", date: "2026-03-01" }
+    ]
+  },
+  {
+    id: 36,
+    title: "Cast Iron Pre-Seasoned Dutch Oven with Lid 4.5L",
+    description: "Heirloom-grade heavy cast iron Dutch oven with dual side loop handles and snug self-basting lid. Provides superior heat retention and uniform distribution for slow braises, biryanis, and sourdough bread.",
+    category: "home-living",
+    price: 2799,
+    discountPercentage: 18,
+    rating: 4.8,
+    stock: 20,
+    brand: "BrewMaster",
+    thumbnail: "/images/products/dutch-oven.jpg",
+    images: [
+      "/images/products/dutch-oven.jpg"
+    ],
+    specs: {
+      "Capacity": "4.5 Liters (4.8 Quart)",
+      "Pre-Seasoning": "Pre-cured with 100% Natural Organic Flaxseed Oil",
+      "Heat Tolerance": "Oven safe up to 260°C (500°F)",
+      "Stove Compatibility": "Gas, Induction, Ceramic, Campfire Safe"
+    },
+    reviews: [
+      { rating: 5, comment: "Cooked the best slow-cooked mutton curry of my life. Retains sizzling heat forever on the dining table.", reviewerName: "Kunal Mehra", date: "2026-02-15" }
+    ]
+  },
+
+  // --- ADDITIONAL ACCESSORIES ---
+  {
+    id: 37,
+    title: "Full-Grain Italian Leather Reversible Formal Belt",
+    description: "Premium handcrafted dual-tone reversible leather belt featuring a smooth 360-degree rotating buckle to alternate seamlessly between classic black and rich deep brown.",
+    category: "accessories",
+    price: 1199,
+    discountPercentage: 25,
+    rating: 4.8,
+    stock: 50,
+    brand: "CraftHide",
+    thumbnail: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Leather": "100% Genuine Full-Grain Vegetable-Tanned Cowhide",
+      "Mechanism": "Heavy-Duty Zinc Alloy Twist Reversible Buckle",
+      "Colors": "Midnight Black & Cognac Brown in one belt",
+      "Width": "35mm Standard Dress Trouser Width"
+    },
+    reviews: [
+      { rating: 5, comment: "High quality thick leather that doesn't bend or crease easily. The twist buckle works like a charm.", reviewerName: "Rajeev Bansal", date: "2026-02-23" }
+    ]
+  },
+  {
+    id: 38,
+    title: "Waxed Canvas & Leather Trim Weekender Travel Duffle 40L",
+    description: "Rugged heavy-gauge waxed cotton canvas travel duffle bag with reinforced leather handles, separate ventilated footwear compartment, and adjustable padded shoulder strap.",
+    category: "accessories",
+    price: 2599,
+    discountPercentage: 30,
+    rating: 4.7,
+    stock: 35,
+    brand: "PackPro",
+    thumbnail: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Volume": "40 Liters (Ideal for 3-4 day weekend trips)",
+      "Fabric": "Water-Repellent 16oz Waxed Canvas & Crazy Horse Leather",
+      "Shoe Pocket": "Dedicated Side Zip Water-Resistant Shoe Compartment",
+      "Compliant": "Fits all international airline overhead cabin bins"
+    },
+    reviews: [
+      { rating: 5, comment: "Carries 4 days worth of clothes, toiletries, and extra shoes with ease. Looks very classy.", reviewerName: "Sameer Joshi", date: "2026-03-05" }
+    ]
+  },
+  {
+    id: 39,
+    title: "925 Sterling Silver Minimalist Herringbone Chain Necklace",
+    description: "Liquid-smooth flat herringbone snake chain crafted in hallmarked 925 sterling silver with high-polish rhodium anti-tarnish plating and durable lobster claw closure.",
+    category: "accessories",
+    price: 1799,
+    discountPercentage: 15,
+    rating: 4.9,
+    stock: 40,
+    brand: "Kronos",
+    thumbnail: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Metal": "BIS Hallmarked Solid 925 Sterling Silver",
+      "Plating": "Multi-layer Rhodium Flash (Anti-Allergenic & Anti-Tarnish)",
+      "Dimensions": "Width 3.5mm | Length 18 Inches + 2 Inch Extender",
+      "Weight": "7.8 grams"
+    },
+    reviews: [
+      { rating: 5, comment: "Drapes like liquid silver against the collarbone. Worn it daily for weeks with zero discoloration.", reviewerName: "Ananya Deshmukh", date: "2026-02-17" }
+    ]
+  },
+  {
+    id: 40,
+    title: "Compact Tech Organizer Cord & Charger Travel Pouch",
+    description: "Dual-layer portable electronic accessories organizer case with elastic cable management slots, padded power bank pouch, SD card holders, and water-repellent shell.",
+    category: "accessories",
+    price: 699,
+    discountPercentage: 20,
+    rating: 4.6,
+    stock: 70,
+    brand: "PackPro",
+    thumbnail: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Dimensions": "24 cm x 17 cm x 3.5 cm",
+      "Material": "Cationic 300D Waterproof Fabric with EVA shock absorption",
+      "Layout": "6 Elastic Cord Loops, 3 Mesh Slots, 1 Large Zipper Pocket",
+      "Portability": "Convenient hand carry wristlet strap"
+    },
+    reviews: [
+      { rating: 4.5, comment: "No more tangled charger cords in my backpack. Everything has its own dedicated spot.", reviewerName: "Rishabh K.", date: "2026-03-02" }
+    ]
+  },
+
+  // --- ADDITIONAL BEAUTY ---
+  {
+    id: 41,
+    title: "AHA 10% + BHA 2% Peeling Exfoliating Face Solution 30ml",
+    description: "Weekly clarifying exfoliating facial peel with 10% Glycolic/Lactic acids and 2% Salicylic acid to target uneven skin tone, unclog stubborn pores, and restore radiance.",
+    category: "beauty",
+    price: 599,
+    discountPercentage: 20,
+    rating: 4.8,
+    stock: 75,
+    brand: "Botanica Lab",
+    thumbnail: "/images/products/peeling-solution.jpg",
+    images: [
+      "/images/products/peeling-solution.jpg"
+    ],
+    specs: {
+      "Actives": "10% AHA (Glycolic & Lactic), 2% BHA (Salicylic Acid), Aloe Juice",
+      "Benefit": "Smooths skin texture, cleans blackheads, fades dark spots",
+      "Usage": "Apply for 8-10 minutes once a week at night",
+      "Volume": "30 ml Glass Bottle with Dropper"
+    },
+    reviews: [
+      { rating: 5, comment: "Instant glass skin after washing it off! Makes makeup glide on so smoothly the next morning.", reviewerName: "Pooja V.", date: "2026-03-06" }
+    ]
+  },
+  {
+    id: 42,
+    title: "Niacinamide 10% + Zinc 1% Oil Control Blemish Serum 30ml",
+    description: "Lightweight clarifying serum formulated to regulate excess sebum, minimize enlarged pores, reduce redness, and prevent future breakouts without stripping moisture.",
+    category: "beauty",
+    price: 549,
+    discountPercentage: 15,
+    rating: 4.7,
+    stock: 90,
+    brand: "HydraDerm",
+    thumbnail: "/images/products/niacinamide-serum.jpg",
+    images: [
+      "/images/products/niacinamide-serum.jpg"
+    ],
+    specs: {
+      "Key Ingredients": "10% Pure Niacinamide (Vitamin B3), 1% Zinc PCA",
+      "Skin Type": "Oily, Combination, Blemish-Prone Skin",
+      "Texture": "Fast-Absorbing Water-Based Serum",
+      "Free From": "Parabens, Silicones, Mineral Oils, Fragrance"
+    },
+    reviews: [
+      { rating: 5, comment: "My T-zone stays matte all day through humid weather. Pores look noticeably tighter.", reviewerName: "Kavya Murthy", date: "2026-02-26" }
+    ]
+  },
+  {
+    id: 43,
+    title: "Ayurvedic Kumkumadi Miraculous Glowing Night Face Oil 25ml",
+    description: "Authentic classical Ayurvedic beauty elixir infused with pure Kashmiri saffron (Kumkuma), sandalwood, and 26 precious herbs to brighten complexion and reverse dullness.",
+    category: "beauty",
+    price: 999,
+    discountPercentage: 25,
+    rating: 4.9,
+    stock: 50,
+    brand: "Virasat",
+    thumbnail: "/images/products/kumkumadi-oil.jpg",
+    images: [
+      "/images/products/kumkumadi-oil.jpg"
+    ],
+    specs: {
+      "Key Actives": "Grade-A Kashmiri Saffron, Red Sandalwood, Lotus Extract",
+      "Base": "100% Cold-Pressed Organic Sesame Seed Oil",
+      "Benefit": "Deep hydration, youthful glow, pigmentation fade",
+      "Volume": "25 ml Glass Dropper"
+    },
+    reviews: [
+      { rating: 5, comment: "The authentic saffron fragrance is therapeutic. Waking up to soft, glowing skin every morning.", reviewerName: "Shruti Hegde", date: "2026-02-16" }
+    ]
+  },
+  {
+    id: 44,
+    title: "Rice Water & Rosemary Scalp Rejuvenating Hair Mask 200g",
+    description: "Deep conditioning restorative hair spa treatment infused with fermented rice water, rosemary essential oil, and plant keratin to strengthen brittle strands and reduce breakage.",
+    category: "beauty",
+    price: 699,
+    discountPercentage: 30,
+    rating: 4.7,
+    stock: 65,
+    brand: "Botanica Lab",
+    thumbnail: "/images/products/hair-mask.jpg",
+    images: [
+      "/images/products/hair-mask.jpg"
+    ],
+    specs: {
+      "Active Botanicals": "Fermented Rice Water Bio-Peptides, Rosemary Essential Oil, Shea Butter",
+      "Action": "Scalp stimulation, frizz smoothing, and split-end defense",
+      "Suitability": "Safe for chemically treated and colored hair",
+      "Weight": "200 grams Wide-Mouth Jar"
+    },
+    reviews: [
+      { rating: 5, comment: "Replaces salon hair spa completely! Leaves hair silky and bouncy with a clean rosemary scent.", reviewerName: "Riddhi Shah", date: "2026-03-03" }
+    ]
+  },
+
+  // --- ADDITIONAL SPORTS ---
+  {
+    id: 45,
+    title: "Solid Cast Iron Hexagonal Dumbbell Pair (5kg x 2)",
+    description: "Professional rubber-encased hex dumbbell pair with anti-roll hexagonal heads, solid cast iron cores, and knurled ergonomic chrome handles for home gym strength training.",
+    category: "sports",
+    price: 1699,
+    discountPercentage: 25,
+    rating: 4.8,
+    stock: 40,
+    brand: "FitBands",
+    thumbnail: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Total Weight": "10kg Pair (5kg each dumbbell)",
+      "Core": "Heavy Solid Structural Cast Iron",
+      "Coating": "Odor-Free High-Density Natural Rubber Protective Coating",
+      "Grip": "Contoured Non-Slip Knurled Chrome Handle"
+    },
+    reviews: [
+      { rating: 5, comment: "Rubber heads protect my apartment tiled floor. Knurled grip provides secure hold even with sweaty palms.", reviewerName: "Naveen Prasad", date: "2026-02-27" }
+    ]
+  },
+  {
+    id: 46,
+    title: "Deep Tissue Percussion Muscle Massage Gun (6 Heads)",
+    description: "Cordless handheld percussion massager featuring 30 adjustable speed gears, powerful brushless motor, quiet glide technology, and 6 interchangeable targeted massage heads.",
+    category: "sports",
+    price: 2999,
+    discountPercentage: 35,
+    rating: 4.8,
+    stock: 30,
+    brand: "SpeedX",
+    thumbnail: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Speeds": "30 Gear Speeds up to 3200 Percussions/Min",
+      "Battery": "2600mAh Rechargeable Lithium-Ion (6-8 Hours Playtime)",
+      "Attachments": "6 Massage Heads (Ball, Bullet, Fork, Flat, Air Cushion, Wedge)",
+      "Display": "Smart LCD Touch Screen Speed & Battery Indicator",
+      "Noise": "Whisper-Quiet Operation (<42 dB)"
+    },
+    reviews: [
+      { rating: 5, comment: "Relieves post-leg-day muscle soreness in just 10 minutes. Exceptional battery longevity.", reviewerName: "Tarun Gill", date: "2026-03-07" }
+    ]
+  },
+  {
+    id: 47,
+    title: "Pro Breathable Workout & Weightlifting Gym Gloves",
+    description: "Full-palm silicone padded weightlifting gloves with integrated 45cm adjustable wrist wrap support, moisture-wicking back mesh, and quick-pull finger removal tabs.",
+    category: "sports",
+    price: 499,
+    discountPercentage: 20,
+    rating: 4.7,
+    stock: 80,
+    brand: "AsanaFit",
+    thumbnail: "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Palm": "High-Traction Anti-Slip Honeycomb Silicone Cushioning",
+      "Wrist Support": "Built-in 45cm Elastic Compression Strap with Velcro",
+      "Back Material": "Ultra-Breathable Microfiber Mesh",
+      "Use Case": "Barbell Deadlifts, Dumbbell Rows, Pull-ups, Cross-Training"
+    },
+    reviews: [
+      { rating: 5, comment: "Completely prevents calluses on pull-up bars and deadlifts. Wrist wraps provide great stability.", reviewerName: "Aditya Chopra", date: "2026-02-12" }
+    ]
+  },
+  {
+    id: 48,
+    title: "High-Density Foam Roller for Myofascial Release 45cm",
+    description: "Textured EVA deep tissue muscle foam roller designed with 3D multi-density finger zones to relieve back stiffness, enhance spinal mobility, and accelerate athletic recovery.",
+    category: "sports",
+    price: 799,
+    discountPercentage: 30,
+    rating: 4.9,
+    stock: 55,
+    brand: "FitBands",
+    thumbnail: "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80",
+    images: [
+      "https://images.unsplash.com/photo-1518611012118-696072aa579a?w=800&auto=format&fit=crop&q=80"
+    ],
+    specs: {
+      "Core": "Solid High-Density Injection Molded EVA Foam Core",
+      "Dimensions": "45 cm Length x 14 cm Diameter",
+      "Weight Capacity": "Tested for up to 220 kg (485 lbs)",
+      "Target Areas": "Upper Back, Quads, IT Bands, Hamstrings, Calves"
+    },
+    reviews: [
+      { rating: 5, comment: "Durable core that doesn't cave in or flatten under weight. Rolling out the back after work is sheer bliss.", reviewerName: "Manasvi Joshi", date: "2026-03-01" }
+    ]
   }
 ];
 
 export const CATEGORIES_LIST = [
-  { slug: "electronics", name: "Electronics", icon: "Laptop", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80", count: "4 Products" },
-  { slug: "fashion", name: "Fashion", icon: "Shirt", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80", count: "4 Products" },
-  { slug: "home-living", name: "Home & Living", icon: "Home", image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop&q=80", count: "4 Products" },
-  { slug: "accessories", name: "Accessories", icon: "Watch", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80", count: "4 Products" },
-  { slug: "beauty", name: "Beauty", icon: "Sparkles", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80", count: "4 Products" },
-  { slug: "sports", name: "Sports", icon: "Activity", image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&auto=format&fit=crop&q=80", count: "4 Products" }
+  { slug: "electronics", name: "Electronics", icon: "Laptop", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "fashion", name: "Fashion", icon: "Shirt", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "home-living", name: "Home & Living", icon: "Home", image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "accessories", name: "Accessories", icon: "Watch", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "beauty", name: "Beauty", icon: "Sparkles", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "sports", name: "Sports", icon: "Activity", image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&auto=format&fit=crop&q=80", count: "8 Products" }
 ];

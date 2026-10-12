@@ -27,7 +27,7 @@ Shopora strictly follows the 60-30-10 design system:
 ## 🚀 Key Features
 
 ### 1. Navigation Bar
-- **Shopora.** brand logo with shopping bag emblem
+- **Shopora** brand logo with shopping bag emblem
 - Desktop & mobile responsive hamburger menu
 - Category navigation with dropdown
 - Live search bar
