@@ -16,8 +16,8 @@ export function normalizeProduct(p) {
     rating: typeof p.rating === 'number' ? p.rating : 4.5,
     stock: typeof p.stock === 'number' ? p.stock : 20,
     brand: p.brand || 'Shopora',
-    thumbnail: p.thumbnail || (p.images && p.images[0]) || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80',
-    images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [p.thumbnail || 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80'],
+    thumbnail: p.thumbnail || (p.images && p.images[0]) || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23F8FAFC"/><path d="M240 280l60-60 60 60M200 380h200M230 340l40-40 50 50 40-40 40 40" stroke="%23CBD5E1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="250" cy="210" r="24" fill="%23CBD5E1"/></svg>',
+    images: Array.isArray(p.images) && p.images.length > 0 ? p.images : [p.thumbnail || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23F8FAFC"/><path d="M240 280l60-60 60 60M200 380h200M230 340l40-40 50 50 40-40 40 40" stroke="%23CBD5E1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="250" cy="210" r="24" fill="%23CBD5E1"/></svg>'],
     reviews: Array.isArray(p.reviews) ? p.reviews : [],
     specs: p.specs || {
       "Brand": p.brand || "Shopora",

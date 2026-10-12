@@ -155,6 +155,8 @@ export default function ProductDetails() {
               src={activeImage || product.thumbnail}
               alt={product.title}
               className="main-preview-img"
+              referrerPolicy="no-referrer"
+              crossOrigin="anonymous"
             />
             {discount > 0 && (
               <span className="details-badge-discount">{discount}% OFF</span>
@@ -172,7 +174,7 @@ export default function ProductDetails() {
                   className={`thumb-btn ${activeImage === img ? 'active' : ''}`}
                   aria-label={`Thumbnail image ${idx + 1}`}
                 >
-                  <img src={img} alt={`${product.title} view ${idx + 1}`} />
+                  <img src={img} alt={`${product.title} view ${idx + 1}`} referrerPolicy="no-referrer" crossOrigin="anonymous" />
                 </button>
               ))}
             </div>

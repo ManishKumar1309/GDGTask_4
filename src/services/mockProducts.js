@@ -98,9 +98,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.7,
     stock: 55,
     brand: "VoltSpeed",
-    thumbnail: "/images/products/power-bank.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1609592424360-8488e001c3bf?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/power-bank.jpg"
+      "https://images.unsplash.com/photo-1609592424360-8488e001c3bf?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Capacity": "20,000 mAh Lithium Polymer",
@@ -435,7 +435,8 @@ export const FALLBACK_PRODUCTS = [
     brand: "Botanica Lab",
     thumbnail: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
+      "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Key Actives": "15% Vitamin C, 1% Hyaluronic Acid, Ferulic Acid",
@@ -505,9 +506,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.6,
     stock: 60,
     brand: "Botanica Lab",
-    thumbnail: "/images/products/argan-oil.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/argan-oil.jpg"
+      "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Purity": "100% Pure Virgin Cold-Pressed",
@@ -903,9 +904,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.8,
     stock: 20,
     brand: "BrewMaster",
-    thumbnail: "/images/products/dutch-oven.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1584990347449-a681d604b39b?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/dutch-oven.jpg"
+      "https://images.unsplash.com/photo-1584990347449-a681d604b39b?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Capacity": "4.5 Liters (4.8 Quart)",
@@ -953,9 +954,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.7,
     stock: 35,
     brand: "PackPro",
-    thumbnail: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1547949003-9792a18a2601?w=800&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1547949003-9792a18a2601?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Volume": "40 Liters (Ideal for 3-4 day weekend trips)",
@@ -1001,9 +1002,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.6,
     stock: 70,
     brand: "PackPro",
-    thumbnail: "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80",
+    thumbnail: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&auto=format&fit=crop&q=80",
     images: [
-      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Dimensions": "24 cm x 17 cm x 3.5 cm",
@@ -1027,9 +1028,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.8,
     stock: 75,
     brand: "Botanica Lab",
-    thumbnail: "/images/products/peeling-solution.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/peeling-solution.jpg"
+      "https://images.unsplash.com/photo-1608248597359-0a6727781b01?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Actives": "10% AHA (Glycolic & Lactic), 2% BHA (Salicylic Acid), Aloe Juice",
@@ -1051,9 +1052,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.7,
     stock: 90,
     brand: "HydraDerm",
-    thumbnail: "/images/products/niacinamide-serum.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/niacinamide-serum.jpg"
+      "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Key Ingredients": "10% Pure Niacinamide (Vitamin B3), 1% Zinc PCA",
@@ -1075,9 +1076,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.9,
     stock: 50,
     brand: "Virasat",
-    thumbnail: "/images/products/kumkumadi-oil.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/kumkumadi-oil.jpg"
+      "https://images.unsplash.com/photo-1556228720-195a672e8a03?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Key Actives": "Grade-A Kashmiri Saffron, Red Sandalwood, Lotus Extract",
@@ -1099,9 +1100,9 @@ export const FALLBACK_PRODUCTS = [
     rating: 4.7,
     stock: 65,
     brand: "Botanica Lab",
-    thumbnail: "/images/products/hair-mask.jpg",
+    thumbnail: "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&auto=format&fit=crop&q=80",
     images: [
-      "/images/products/hair-mask.jpg"
+      "https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?w=800&auto=format&fit=crop&q=80"
     ],
     specs: {
       "Active Botanicals": "Fermented Rice Water Bio-Peptides, Rosemary Essential Oil, Shea Butter",
@@ -1218,7 +1219,7 @@ export const CATEGORIES_LIST = [
   { slug: "electronics", name: "Electronics", icon: "Laptop", image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
   { slug: "fashion", name: "Fashion", icon: "Shirt", image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
   { slug: "home-living", name: "Home & Living", icon: "Home", image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
-  { slug: "accessories", name: "Accessories", icon: "Watch", image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
+  { slug: "accessories", name: "Accessories", icon: "Watch", image: "https://images.unsplash.com/photo-1511499767150-a48a237f0083?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
   { slug: "beauty", name: "Beauty", icon: "Sparkles", image: "https://images.unsplash.com/photo-1620916566398-39f1143ab7be?w=600&auto=format&fit=crop&q=80", count: "8 Products" },
   { slug: "sports", name: "Sports", icon: "Activity", image: "https://images.unsplash.com/photo-1601925260368-ae2f83cf8b7f?w=600&auto=format&fit=crop&q=80", count: "8 Products" }
 ];

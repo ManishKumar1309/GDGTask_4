@@ -18,7 +18,7 @@ export default function ProductCard({ product }) {
   const discount = Math.round(product.discountPercentage || 0);
   const originalPrice = discount > 0 ? Math.round(product.price / (1 - discount / 100)) : null;
 
-  const fallbackImage = 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&auto=format&fit=crop&q=80';
+  const fallbackImage = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600" viewBox="0 0 600 600"><rect width="600" height="600" fill="%23F8FAFC"/><path d="M240 280l60-60 60 60M200 380h200M230 340l40-40 50 50 40-40 40 40" stroke="%23CBD5E1" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><circle cx="250" cy="210" r="24" fill="%23CBD5E1"/></svg>';
 
   const handleWishlistClick = (e) => {
     e.preventDefault();
@@ -63,9 +63,13 @@ export default function ProductCard({ product }) {
             alt={product.title}
             className={`product-card-image ${imageLoaded ? 'loaded' : ''}`}
             loading="lazy"
+            referrerPolicy="no-referrer"
+            crossOrigin="anonymous"
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
-              e.currentTarget.src = fallbackImage;
+              if (e.currentTarget.src !== fallbackImage) {
+                e.currentTarget.src = fallbackImage;
+              }
               setImageLoaded(true);
             }}
           />
